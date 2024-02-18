@@ -1,7 +1,5 @@
-import { Inter } from "next/font/google";
-import "./globals.css";
-
-const inter = Inter({ subsets: ["latin"] });
+import '@/app/global.css';
+import { ibm_plex_sans} from '@/app/fonts';
 
 export const metadata = {
   title: "App",
@@ -11,7 +9,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={ibm_plex_sans.className}>{children}</body>
     </html>
   );
 }
