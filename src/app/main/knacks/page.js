@@ -1,4 +1,4 @@
-import Preview from '@/components/preview';
+import Preview from '@/app/components/preview';
 
 export default function Knacks() {
   return (
