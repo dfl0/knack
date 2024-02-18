@@ -20,7 +20,7 @@ const grabName = ()=> {
     try {
         let inn = document.getElementById("inName").value;
         console.log(inn);
-        hold[0]=inn;
+        //hold[0]=inn;
         nameField=true;
         document.getElementById("inName").value = '';
         return "correct name\n";
@@ -40,7 +40,7 @@ const grabEmail = ()=> {
     try {
         let inn = document.getElementById("inEmail").value;
         console.log(inn);
-        hold[1]=inn;
+        //hold[1]=inn;
         emailField=true;
         document.getElementById("inEmail").value = '';
         return "correct email\n";
@@ -58,7 +58,7 @@ const grabPass = ()=> {
     try {
         let inn = document.getElementById("inPassword").value;
         console.log(inn);
-        hold[2]=inn;
+        //hold[2]=inn;
         passwordField=true;
         document.getElementById("inPassword").value = '';
         return "correct password\n";
