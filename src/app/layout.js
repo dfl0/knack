@@ -1,4 +1,4 @@
-import '@/app/global.css';
+import '@/app/globals.css';
 import { ibm_plex_sans} from '@/app/fonts';
 
 export const metadata = {
