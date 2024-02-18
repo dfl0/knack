@@ -8,11 +8,19 @@ import bUnion from '../welcome/zPics/bUnion.jpg'
 
 let onLogInPage = true;
 
-let nameField = false;
-let emailField = false;
-let passwordField = false;
+// let nameField = false;
+// let emailField = false;
+// let passwordField = false;
 
-let names = "hello";
+const userInformation = {};
+
+function addUser(username, email, password){
+    userInformation[username] = {email, password};
+}
+
+addUser("jack198", "jhannag1@binghamton.edu", "password");
+
+
 
 
 
