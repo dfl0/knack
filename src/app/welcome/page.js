@@ -12,7 +12,7 @@ let nameField = false;
 let emailField = false;
 let passwordField = false;
 
-let hold = "hello";
+let names = "hello";
 
 
 
@@ -29,6 +29,7 @@ const grabName = ()=> {
         
     } catch (error) {
         console.log(error);
+        document.getElementById("inName").value = '';
         nameField = false;
         return "wrong name\n";
 
@@ -49,6 +50,7 @@ const grabEmail = ()=> {
         
     } catch (error) {
         console.log(error);
+        document.getElementById("inEmail").value = '';
         emailField = false;
         return "wrong email\n";
     }
@@ -67,6 +69,7 @@ const grabPass = ()=> {
         
     } catch (error) {
         console.log(error);
+        document.getElementById("inPassword").value = '';
         passwordField = false;
         return "wrong password\n";
 
