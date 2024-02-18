@@ -74,16 +74,12 @@ export default function NewListing() {
 
     return (
         <div className="bg-gray-300 min-h-screen">
-            <header className="bg-gray-400 p-2">
-                <h1 className="bold">KNACK</h1>
-            </header>
-            
             {/* "Create a Listing" Title */}
-            <div className="mt-12 ml-20">
+            <div className="pt-12 ml-20">
                 <h2 className="text-3xl font-semibold">Create a KnickKnack Listing</h2>
             </div>
 
-            <div className="flex justify-between mt-12 ml-20">
+            <div className="flex justify-between pt-10 ml-20">
                 {/* Image Upload Box */}
                 <div
                     className="max-w-xl max-h-xl h-auto w-full bg-gray-400 flex flex-col justify-center items-center text-6xl rounded-lg text-white overflow-hidden cursor-pointer px-2"
