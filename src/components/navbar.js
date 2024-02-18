@@ -1,7 +1,8 @@
 'use client';
 
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Link from 'next/link';
+import Image from 'next/image';
 import clsx from 'clsx';
 
 export default function NavBar() {
@@ -28,7 +29,14 @@ export default function NavBar() {
             </Link>
           </div>
           <div className="text-sm">{username}</div>
-          <div className="w-8 h-8 rounded-full bg-gray-600 ml-2"></div>
+          <div className="w-8 h-8 rounded-xl ml-2 overflow-hidden">
+            <Image
+              src="/images/default_pfp.png"
+              alt="Profile Picture"
+              width={32}
+              height={32}
+            />
+          </div>
         </div>
       </div>
       <div>
