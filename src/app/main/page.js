@@ -1,7 +1,5 @@
-import NavBar from '@/components/navbar';
+import { redirect } from 'next/navigation'
 
 export default function Main() {
-  return (
-    <NavBar />
-  );
+  redirect('/main/knacks');
 }
