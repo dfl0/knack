@@ -1,11 +1,9 @@
-import { redirect } from 'next/navigation'
-
 export default function AddListing() {
 
   return (
       <>
       <div className="w-80 py-2">
-        <a href="newlisting">
+        <a href="/main/newlisting">
           <button className="w-80 h-96 bg-gray-200 rounded-md flex justify-center items-center text-9xl text-gray-300">
             ＋
           </button>
