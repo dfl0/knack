@@ -12,7 +12,11 @@ export default function NavBar() {
     <>
       <div className="h-15 w-full bg-gray-200 fixed place-items-stretch">
         <div className="flex items-center px-6 py-3 h-max">
-          <div className="text-2xl font-bold">KNACK</div>
+          <div className="text-2xl font-bold">
+            <Link href="/main/knacks">
+              KNACK
+            </Link>
+          </div>
           <input type="text" placeholder="What are you looking for?" name="Search" className="appearance-none outline-none text-sm bg-gray-300 border px-4 rounded-xl h-8 grow mx-20" />
           <div className="text-sm flex gap-6 mr-20 static">
             <Link

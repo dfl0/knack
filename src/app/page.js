@@ -1,5 +1,5 @@
+import { redirect } from 'next/navigation'
+
 export default function Home() {
-  return (
-    <h1 className="italic">Hello world!</h1>
-  );
+  redirect('/main/knacks');
 }
