@@ -1,5 +1,5 @@
-import AddListing from '@/app/components/addlisting';
-import Preview from '@/app/components/preview';
+import AddListing from '@components/addlisting';
+import Preview from '@components/preview';
 
 export default function Knacks() {
   return (

@@ -1,5 +1,5 @@
-import '@/app/globals.css';
-import { ibm_plex_sans} from '@/app/fonts';
+import '@app/globals.css';
+import { ibm_plex_sans} from '@app/fonts';
 
 export const metadata = {
   title: "App",

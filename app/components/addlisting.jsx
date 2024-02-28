@@ -5,7 +5,7 @@ export default function AddListing() {
       <>
       <div className="w-80 py-2">
         <button className="w-80 h-96 bg-gray-200 rounded-md flex justify-center items-center text-9xl text-gray-300">
-          <Link href='/main/newlisting'>
+          <Link href='/newlisting'>
           ＋
           </ Link>
         </button>

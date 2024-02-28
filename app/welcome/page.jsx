@@ -1,9 +1,6 @@
 'use client';
 import {useState} from 'react';
-import { render } from 'react-dom';
 import './loginSignup.css'
-import bUnion from '../welcome/zPics/bUnion.jpg'
-import { userInfo } from 'os';
 
 
 let userNum = 0;
