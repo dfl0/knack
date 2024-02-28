@@ -9,7 +9,7 @@ export default function NavBar() {
   const pathname = usePathname();
   let username = "student1"
   return (
-    <div className="flex items-center w-full h-14 px-6 bg-gray-200 fixed overflow-hidden">
+    <div className="flex items-center w-full h-14 px-6 bg-gray-200 overflow-hidden">
       <div className="text-2xl font-bold">
         <Link href="/knacks">
           KNACK
