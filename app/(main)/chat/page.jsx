@@ -1,17 +1,19 @@
 "use client";
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from "react";
+import clsx from "clsx";
+import ChatButton from "@components/chatbutton";
 
 const groupChats = [
-  { id: 'group1', name: 'MATH 463 Diff Geom.' },
-  { id: 'group2', name: 'CS 310 Data Struct.' },
-  { id: 'group3', name: 'CHEM 231 Organic Chem.' },
-  { id: 'group4', name: 'MUS 111 Music Cultures' },
+  { id: "group1", name: "MATH 463 Diff Geom." },
+  { id: "group2", name: "CS 310 Data Struct." },
+  { id: "group3", name: "CHEM 231 Organic Chem." },
+  { id: "group4", name: "MUS 111 Music Cultures" },
   // Add more groups as needed
 ];
 
 export default function KnackChat() {
   const [activeGroup, setActiveGroup] = useState(groupChats[0].id);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState("");
   const [messages, setMessages] = useState([]);
   const endOfMessagesRef = useRef(null);
 
@@ -31,58 +33,54 @@ export default function KnackChat() {
         group: activeGroup,
       };
       setMessages([...messages, newMessage]);
-      setMessage('');
+      setMessage("");
     }
   };
 
   useEffect(() => {
-    endOfMessagesRef.current?.scrollIntoView({ behavior: 'smooth' });
+    endOfMessagesRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
   return (
-    <div className="flex h-screen">
-      <div className="w-60 bg-gray-800 text-white overflow-auto">
-        {groupChats.map(group => (
-          <button
+    <div className="w-full h-full flex">
+      <div className="w-64 bg-gray-100 shrink-0 flex flex-col items-center justify-start gap-1 px-1 pt-1">
+        {groupChats.map((group) => (
+          <ChatButton
             key={group.id}
-            onClick={() => handleGroupClick(group.id)}
-            className={`w-full mt-16 text-left py-4 px-4 hover:bg-gray-700 ${activeGroup === group.id ? 'bg-gray-300' : ''}`}
-          >
-            {group.name}
-          </button>
+            id={group.id}
+            title={group.name}
+            sub="Most recent message..."
+            active={activeGroup}
+            action={handleGroupClick}
+          />
         ))}
       </div>
-      <div className="flex flex-col flex-grow">
-        {/* Sticky Header */}
-        <div className="-top-10 z-10 bg-gray-200 shadow-md p-4">
-          <h2 className="text-2xl font-semibold">{groupChats.find(group => group.id === activeGroup).name}</h2>
-        </div>
-        {/* Chat Window */}
-        <div className="flex-grow overflow-auto p-4">
-          <div className="space-y-24">
-            {messages.filter(msg => msg.group === activeGroup).map(msg => (
-              <div key={msg.id} className="break-words">{msg.text}</div>
-            ))}
-            <div ref={endOfMessagesRef} />
+      <div className="grow flex flex-col">
+        <div className="h-10 shrink-0 bg-gray-100 flex justify-center items-center">
+          <div className="font-semibold">
+            {groupChats.find((group) => group.id === activeGroup).name}
           </div>
         </div>
-        {/* Input Bar */}
-        <div className="p-4 bg-gray-200">
-          <div className="flex space-x-2">
-            <input
-              type="text"
-              value={message}
-              onChange={handleMessageChange}
-              className="flex-grow p-2 rounded border-gray-300"
-              placeholder="Type a message..."
-            />
-            <button
-              onClick={handleSendMessage}
-              className="bg-blue-500 text-white rounded px-4 py-2 hover:bg-blue-600"
-            >
-              Send
-            </button>
-          </div>
+        <div className="grow">
+          {messages.filter(msg => msg.group === activeGroup).map(msg => (
+            <div key={msg.id} className="break-words px-4 py-2">{msg.text}</div>
+          ))}
+          <div ref={endOfMessagesRef} />
+        </div>
+        <div className="h-20 shrink-0 bg-gray-100 flex items-center gap-4 px-4">
+          <input
+            type="text"
+            value={message}
+            onChange={handleMessageChange}
+            className="appearance-none outline-none bg-gray-200 px-4 h-10 rounded-xl text-sm grow"
+            placeholder="Type a message..."
+          />
+          <button
+            onClick={handleSendMessage}
+            className="bg-blue-500 text-white px-4 h-10 rounded-xl hover:bg-blue-600"
+          >
+            Send
+          </button>
         </div>
       </div>
     </div>
