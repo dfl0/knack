@@ -1,5 +1,3 @@
 export default function Authenticate() {
-  return(
-    <div className="h-screen w-screen"></div>
-  );
+  return <div className="h-screen w-screen"></div>
 }

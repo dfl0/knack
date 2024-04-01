@@ -1,23 +1,23 @@
-"use client";
+"use client"
 
-import { usePathname } from "next/navigation";
-import Link from "next/link";
-import Image from "next/image";
-import Input from "@components/input";
-import ToggleButton from "@components/togglebutton";
+import { usePathname } from "next/navigation"
+import Link from "next/link"
+import Image from "next/image"
+import Input from "@components/input"
+import ToggleButton from "@components/togglebutton"
 
 export default function NavBar() {
-  const pathname = usePathname();
-  let username = "student1";
+  const pathname = usePathname()
+  let username = "student1"
   return (
-    <div className="flex items-center w-full h-14 px-8 overflow-hidden border-b border-zinc-100">
-      <div className="text-md text-zinc-950 font-bold">
+    <div className="flex h-14 w-full items-center overflow-hidden border-b border-zinc-100 px-8">
+      <div className="text-md font-bold text-zinc-950">
         <Link href="/knacks">
           <span className="pr-4">/ /</span>
           <span className="text-zinc-950">KNACK</span>
         </Link>
       </div>
-      <div className="flex grow mx-20">
+      <div className="mx-20 flex grow">
         <Input
           type="text"
           placeholder="Search documentation..."
@@ -48,7 +48,7 @@ export default function NavBar() {
         //   </Link>
         // </div>
       }
-      <div className="shrink-0 h-9 bg-zinc-100 mr-10 p-1 flex items-center rounded-xl">
+      <div className="mr-10 flex h-9 shrink-0 items-center rounded-xl bg-zinc-100 p-1">
         <Link href="/knacks">
           <ToggleButton active={pathname === "/knacks"}>Knacks</ToggleButton>
         </Link>
@@ -57,7 +57,7 @@ export default function NavBar() {
         </Link>
       </div>
       <div className="text-sm">{username}</div>
-      <div className="w-8 h-8 rounded-xl ml-2 overflow-hidden">
+      <div className="ml-2 h-8 w-8 overflow-hidden rounded-xl">
         <Image
           src="/images/default_pfp.png"
           alt="Profile Picture"
@@ -66,5 +66,5 @@ export default function NavBar() {
         />
       </div>
     </div>
-  );
+  )
 }
