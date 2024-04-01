@@ -1,5 +1,10 @@
-import '@app/globals.css';
-import { ibm_plex_sans} from '@app/fonts';
+import { Inter } from "next/font/google";
+import '@/globals.css';
+
+export const fontSans = Inter({
+  subsets: ['latin'],
+  variable: "--font-sans"
+});
 
 export const metadata = {
   title: "App",
@@ -9,7 +14,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={ibm_plex_sans.className}>{children}</body>
+      <body className={"min-h-screen min-w-screen antialiased " + fontSans.className}>{children}</body>
     </html>
   );
 }
