@@ -1,11 +1,11 @@
-export default function Input({ ...props }) {
+import { cn } from "@/lib/utils"
+
+export default function Input({ className, ...props }) {
   return (
     <input
-      {...props}
       autoComplete="off"
-      className="
-        h-8
-        grow
+      className={cn(
+        `h-8
         appearance-none
         rounded-xl
         border
@@ -21,8 +21,10 @@ export default function Input({ ...props }) {
         transition-colors
         hover:bg-zinc-100
         focus:border-zinc-300
-        focus:bg-zinc-100
-      "
-    />
+        focus:bg-zinc-100`,
+        className
+      )}
+      {...props}
+      />
   )
 }

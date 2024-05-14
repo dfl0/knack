@@ -110,6 +110,7 @@ export default function Chats() {
               onChange={handleMessageChange}
               onKeyDown={handleKeyDown}
               ref={messagePromptRef}
+              className="grow"
             />
             <button
               type="submit"
