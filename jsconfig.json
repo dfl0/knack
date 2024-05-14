@@ -3,7 +3,8 @@
     "jsx": "react",
     "baseURL": ".",
     "paths": {
-      "@/*": ["./app/*"],
+      "@/*": ["./*"],
+      "@app/*": ["./app/*"],
       "@components/*": ["./app/components/*"],
       "@public/*": ["./public/*"]
     }

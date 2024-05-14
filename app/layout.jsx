@@ -1,5 +1,5 @@
 import { Inter } from "next/font/google"
-import "@/globals.css"
+import "@app/globals.css"
 
 export const fontSans = Inter({
   subsets: ["latin"],
@@ -16,7 +16,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body
         className={
-          "min-w-screen min-h-screen antialiased " + fontSans.className
+          "min-h-screen antialiased " + fontSans.className
         }
       >
         {children}
