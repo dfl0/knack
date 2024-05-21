@@ -4,9 +4,7 @@
     "baseURL": ".",
     "paths": {
       "@/*": ["./*"],
-      "@app/*": ["./app/*"],
-      "@components/*": ["./app/components/*"],
-      "@public/*": ["./public/*"]
+      "@components/*": ["./app/components/*"]
     }
   },
   "include": ["."],
