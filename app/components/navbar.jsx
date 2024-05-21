@@ -20,7 +20,7 @@ export default function NavBar() {
       <div className="mx-20 flex grow">
         <Input
           type="text"
-          placeholder="Search documentation..."
+          placeholder="Search for Knacks..."
           name="Search Knack"
           className="grow"
         />
