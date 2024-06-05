@@ -6,22 +6,23 @@ const InputPrompt = React.forwardRef(({ className, ...props }, ref) => {
   return (
     <textarea
       className={cn(
-        `h-8
+        `h-10
         max-h-36
-        min-h-8
+        min-h-10
         resize-none
+        scroll-p-2
         appearance-none
         rounded-xl
         border
         border-zinc-200
         px-4
-        py-[0.3125rem]
+        py-[0.625rem]
         text-sm
         text-zinc-950
         placeholder-zinc-400
         outline-none
         transition-colors
-        hover:bg-zinc-100
+        hover:bg-zinc-50
         focus:border-zinc-300
         focus:bg-zinc-100`,
         className

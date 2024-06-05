@@ -1,14 +1,20 @@
 "use client"
 
-import { usePathname } from "next/navigation"
 import Link from "next/link"
 import Image from "next/image"
+import { usePathname } from "next/navigation"
+import { signOut } from "next-auth/react"
+import { FiLogOut } from "react-icons/fi"
+
 import Input from "@components/input"
+import Button from "@components/button"
 import ToggleButton from "@components/togglebutton"
 
 export default function NavBar() {
   const pathname = usePathname()
+
   let username = "student1"
+
   return (
     <div className="flex h-14 w-full items-center overflow-hidden border-b border-zinc-100 px-8">
       <div className="text-md font-bold text-zinc-950">
@@ -33,14 +39,23 @@ export default function NavBar() {
           <ToggleButton active={pathname === "/chats"}>Chats</ToggleButton>
         </Link>
       </div>
-      <div className="text-sm">{username}</div>
-      <div className="ml-2 h-8 w-8 overflow-hidden rounded-xl">
-        <Image
-          src="/images/default_pfp.png"
-          alt="Profile Picture"
-          width={32}
-          height={32}
-        />
+      <div className="flex items-center gap-2">
+        <div className="text-sm">{username}</div>
+        <div className="h-8 w-8 overflow-hidden rounded-xl">
+          <Image
+            src="/images/default_pfp.png"
+            alt="Profile Picture"
+            width={32}
+            height={32}
+          />
+        </div>
+        <Button
+          variant="invisible"
+          onClick={() => signOut()}
+          className="h-8 w-8 p-2"
+        >
+          <FiLogOut />
+        </Button>
       </div>
     </div>
   )

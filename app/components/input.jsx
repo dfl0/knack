@@ -1,9 +1,14 @@
+"use-client"
+
+import { FieldErrors, FieldValues, UseFormRegister } from "react-hook-form"
+
 import { cn } from "@/lib/utils"
 
-export default function Input({ className, ...props }) {
+const Input = ({ id, options, register, errors, disabled, className, ...props }) => {
   return (
     <input
       autoComplete="off"
+      {...register}
       className={cn(
         `h-8
         appearance-none
@@ -19,12 +24,17 @@ export default function Input({ className, ...props }) {
         shadow-none
         outline-none
         transition-colors
-        hover:bg-zinc-100
+        hover:bg-zinc-50
         focus:border-zinc-300
         focus:bg-zinc-100`,
+        errors &&
+          "border-rose-500 bg-red-50 hover:bg-red-50 focus:border-rose-500 focus:bg-red-50",
+        disabled && "pointer-events-none opacity-50",
         className
       )}
       {...props}
-      />
+    />
   )
 }
+
+export default Input
