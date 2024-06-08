@@ -7,5 +7,8 @@ export default withAuth({
 })
 
 export const config = {
-  matcher: ["/:path*"],
+  matcher: [
+    "/",
+    "/((?!api|_next|static|public).*)", // regex that matches any route starting with "api", "_next", "static", or "public"
+  ],
 }
