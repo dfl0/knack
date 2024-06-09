@@ -10,13 +10,17 @@ import Input from "@components/input"
 import Button from "@components/button"
 import ToggleButton from "@components/togglebutton"
 
-export default function NavBar() {
+export default function NavBar({ currentUser, ...props }) {
   const pathname = usePathname()
 
   let username = "student1"
+  console.log(currentUser)
 
   return (
-    <div className="flex h-14 w-full items-center overflow-hidden border-b border-zinc-100 px-8">
+    <div
+      className="flex h-14 w-full items-center overflow-hidden border-b border-zinc-100 px-8"
+      {...props}
+    >
       <div className="text-md font-bold text-zinc-950">
         <Link href="/knacks">
           <span className="pr-4">/ /</span>
@@ -40,7 +44,7 @@ export default function NavBar() {
         </Link>
       </div>
       <div className="flex items-center gap-2">
-        <div className="text-sm">{username}</div>
+        <div className="text-sm">{currentUser.name}</div>
         <div className="h-8 w-8 overflow-hidden rounded-xl">
           <Image
             src="/images/default_pfp.png"
