@@ -60,8 +60,14 @@ const AuthForm = ({ className, ...props }) => {
     } else {
       axios
         .post("/api/register", data)
-        .then(() => toast.success("Successfully registered!"))
         .catch(() => toast.error("Failed to register user"))
+        .then(() => {
+          toast.success("Successfully registered!")
+          signIn("credentials", {
+            ...data,
+            redirect: false,
+          })
+        })
         .finally(() => setIsLoading(false))
     }
   }
