@@ -13,9 +13,6 @@ import ToggleButton from "@components/togglebutton"
 export default function NavBar({ currentUser, ...props }) {
   const pathname = usePathname()
 
-  let username = "student1"
-  console.log(currentUser)
-
   return (
     <div
       className="flex h-14 w-full items-center overflow-hidden border-b border-zinc-100 px-8"
