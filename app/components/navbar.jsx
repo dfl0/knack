@@ -4,7 +4,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { signOut } from "next-auth/react"
-import { FiLogOut } from "react-icons/fi"
+import { LogOut } from "lucide-react"
 
 import Input from "@components/input"
 import Button from "@components/button"
@@ -15,13 +15,13 @@ export default function NavBar({ currentUser, ...props }) {
 
   return (
     <div
-      className="flex h-14 w-full items-center overflow-hidden border-b border-zinc-100 px-8"
+      className="flex h-14 w-full items-center overflow-hidden border-b border-zinc-100 px-8 text-zinc-950"
       {...props}
     >
-      <div className="text-md font-bold text-zinc-950">
+      <div className="text-md font-bold">
         <Link href="/knacks">
           <span className="pr-4">/ /</span>
-          <span className="text-zinc-950">KNACK</span>
+          <span>KNACK</span>
         </Link>
       </div>
       <div className="mx-20 flex grow">
@@ -55,7 +55,7 @@ export default function NavBar({ currentUser, ...props }) {
           onClick={() => signOut()}
           className="h-8 w-8 p-2"
         >
-          <FiLogOut />
+          <LogOut />
         </Button>
       </div>
     </div>
