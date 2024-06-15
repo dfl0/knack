@@ -7,7 +7,7 @@ const Button = ({ children, variant, disabled, className, ...props }) => {
     <button
       className={cn(
         `inline-flex
-        h-10
+        h-8
         items-center
         justify-center
         gap-2
