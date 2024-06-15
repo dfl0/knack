@@ -123,7 +123,7 @@ const AuthForm = ({ className, ...props }) => {
             errors={errors.password}
             className="h-10"
           />
-          <Button type="submit" disabled={isLoading} className="w-full">
+          <Button type="submit" disabled={isLoading} className="h-10 w-full">
             {hasAccount ? "Sign In" : "Register"}
           </Button>
         </div>
