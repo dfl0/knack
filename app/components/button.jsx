@@ -2,7 +2,7 @@
 
 import { cn } from "@/lib/utils"
 
-const Button = ({ children, variant, disabled, className, ...props }) => {
+const Button = ({ children, variant, uniform, disabled, className, ...props }) => {
   return (
     <button
       className={cn(
@@ -23,7 +23,7 @@ const Button = ({ children, variant, disabled, className, ...props }) => {
         variant === "secondary" &&
           `bg-zinc-100
           text-zinc-900
-          hover:bg-zinc-100`,
+          hover:bg-zinc-100/75`,
         variant === "outline" &&
           `bg-white
           text-zinc-900
@@ -35,6 +35,12 @@ const Button = ({ children, variant, disabled, className, ...props }) => {
           `bg-white
           text-zinc-900
           hover:bg-zinc-100`,
+        variant === "subtle" &&
+          `bg-white
+          text-zinc-600
+          hover:bg-white
+          hover:text-zinc-950`,
+        uniform && "p-1 h-8 w-8",
         disabled && "pointer-events-none opacity-50",
         className
       )}
