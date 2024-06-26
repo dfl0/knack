@@ -1,9 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -18,4 +12,21 @@ model User {
   name           String
   email          String @unique
   hashedPassword String
+
+  friendIds String[] @db.ObjectId
+
+  outgoingFriendRequests FriendRequest[] @relation("outgoing")
+  incomingFriendRequests FriendRequest[] @relation("incoming")
+}
+
+model FriendRequest {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+
+  sender   User   @relation("outgoing", fields: [senderId], references: [id])
+  senderId String @db.ObjectId
+
+  recipient   User   @relation("incoming", fields: [recipientId], references: [id])
+  recipientId String @db.ObjectId
+
+  @@unique(fields: [senderId, recipientId], name: "userIds")
 }

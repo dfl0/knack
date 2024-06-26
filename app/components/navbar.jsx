@@ -43,12 +43,14 @@ export default function NavBar({ currentUser, ...props }) {
       <div className="flex items-center gap-2">
         <div className="text-sm">{currentUser.name}</div>
         <div className="h-8 w-8 overflow-hidden rounded-xl">
-          <Image
-            src="/images/default_pfp.png"
-            alt="Profile Picture"
-            width={32}
-            height={32}
-          />
+          <Link href="/profile">
+            <Image
+              src="/images/default_pfp.png"
+              alt="Profile Picture"
+              width={32}
+              height={32}
+            />
+          </Link>
         </div>
         <Button
           variant="invisible"

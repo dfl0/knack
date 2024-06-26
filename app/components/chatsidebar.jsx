@@ -1,12 +1,18 @@
-import React, { useState } from "react"
+import { useState } from "react"
 import { UserPlus } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
 import Button from "@components/button"
 import ChatButton from "@components/chatbutton"
+import Modal from "@components/modal"
+import AddFriendForm from "@components/addfriendform"
 
 const ChatSidebar = ({ groups, current, setCurrent, className, ...props }) => {
+  const handleGroupClick = (groupId) => {
+    setCurrent(groupId)
+  }
+
   const [showAddFriend, setShowAddFriend] = useState(false)
 
   const toggleAddFriend = () => {
@@ -15,14 +21,6 @@ const ChatSidebar = ({ groups, current, setCurrent, className, ...props }) => {
     } else {
       setShowAddFriend(true)
     }
-  }
-
-  const handleGroupClick = (groupId) => {
-    setCurrent(groupId)
-  }
-
-  const handleModalClick = (e) => {
-    e.stopPropagation()
   }
 
   return (
@@ -63,24 +61,17 @@ const ChatSidebar = ({ groups, current, setCurrent, className, ...props }) => {
       <Button
         variant="invisible"
         onClick={toggleAddFriend}
-        className="h-8 w-full text-sm text-zinc-500"
+        className="h-9 w-full text-sm text-zinc-500"
       >
         Add Friend
         <UserPlus absoluteStrokeWidth className="h-4 w-4" />
       </Button>
-      {showAddFriend && (
-        <div
-          onClick={toggleAddFriend}
-          className="fixed left-0 top-0 z-[1000] flex h-screen w-screen items-center justify-center bg-black/25"
-        >
-          <div
-            onClick={handleModalClick}
-            className="h-64 w-96 rounded-xl border border-zinc-300 bg-white p-4 text-zinc-950"
-          >
-            Add Friend
-          </div>
-        </div>
-      )}
+      <Modal
+        isOpen={showAddFriend}
+        onClose={toggleAddFriend}
+      >
+        <AddFriendForm />
+      </Modal>
     </div>
   )
 }

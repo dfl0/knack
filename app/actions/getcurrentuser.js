@@ -11,6 +11,14 @@ const getCurrentUser = async () => {
 
     const currentUser = await prisma.user.findUnique({
       where: { email: session.user.email },
+      include: {
+        outgoingFriendRequests: {
+          include: { recipient: true },
+        },
+        incomingFriendRequests: {
+          include: { sender: true },
+        },
+      }
     })
 
     if (!currentUser)
