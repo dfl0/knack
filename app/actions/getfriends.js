@@ -7,7 +7,7 @@ const getFriends = async () => {
     const currentUser = await getCurrentUser()
 
     if (!currentUser)
-      return null
+      return []
 
     const friends = await prisma.user.findMany({
       where: {
@@ -18,11 +18,11 @@ const getFriends = async () => {
     })
 
     if (!friends)
-      return null
+      return []
 
     return friends
   } catch (error) {
-    return null
+    return []
   }
 }
 
