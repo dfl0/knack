@@ -1,6 +1,8 @@
 "use client"
 
 import axios from "axios"
+import { useState } from "react"
+import { useRouter } from "next/navigation"
 import { toast } from "react-hot-toast"
 
 import { Check } from "lucide-react"
@@ -10,28 +12,50 @@ import { cn } from "@/lib/utils"
 import Button from "@components/button"
 
 const FriendRequest = ({ user, type, className, ...props }) => {
+  const [isLoading, setIsLoading] = useState(false)
+  const router = useRouter()
+
   const handleAccept = () => {
+    setIsLoading(true)
+
     axios
       .post("/api/friend/accept", user)
       .catch((error) => toast.error(error.response.data))
+      .finally(() => {
+        router.refresh()
+        setIsLoading(false)
+      })
   }
 
   const handleReject = () => {
+    setIsLoading(true)
+
     axios
       .post("/api/friend/reject", user)
       .catch((error) => toast.error(error.response.data))
+      .finally(() => {
+        router.refresh()
+        setIsLoading(false)
+      })
   }
 
   const handleCancel = () => {
+    setIsLoading(true)
+
     axios
       .post("/api/friend/cancel", user)
       .catch((error) => toast.error(error.response.data))
+      .finally(() => {
+        router.refresh()
+        setIsLoading(false)
+      })
   }
 
   return (
     <div
       className={cn(
         "flex h-12 bg items-center justify-between px-2 text-zinc-950",
+        isLoading && "pointer-events-none opacity-50",
         className
       )}
       {...props}
