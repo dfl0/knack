@@ -17,10 +17,15 @@ model User {
 
   outgoingFriendRequests FriendRequest[] @relation("outgoing")
   incomingFriendRequests FriendRequest[] @relation("incoming")
+
+  chatIds String[] @db.ObjectId
+  chats   Chat[]   @relation(fields: [chatIds], references: [id])
+
+  messages Message[]
 }
 
 model FriendRequest {
-  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
   sender   User   @relation("outgoing", fields: [senderId], references: [id])
   senderId String @db.ObjectId
@@ -29,4 +34,29 @@ model FriendRequest {
   recipientId String @db.ObjectId
 
   @@unique(fields: [senderId, recipientId], name: "userIds")
+}
+
+model Chat {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  isGroup   Boolean
+  name      String?
+  updatedAt DateTime @default(now())
+
+  members   User[]   @relation(fields: [memberIds], references: [id])
+  memberIds String[] @db.ObjectId
+
+  messages   Message[]
+  messageIds String[]  @db.ObjectId
+}
+
+model Message {
+  id     String   @id @default(auto()) @map("_id") @db.ObjectId
+  body   String
+  sentAt DateTime @default(now())
+
+  sender   User   @relation(fields: [senderId], references: [id], onDelete: Cascade)
+  senderId String @db.ObjectId
+
+  chat   Chat   @relation(fields: [chatId], references: [id], onDelete: Cascade)
+  chatId String @db.ObjectId
 }
