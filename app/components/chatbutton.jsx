@@ -4,20 +4,21 @@ import { useRouter } from "next/navigation"
 import { X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import useOtherMembers from "@/app/hooks/useOtherMembers"
 
 import Button from "@components/button"
 
-export default function ChatButton({ chat, currentUser, selected, onDelete }) {
+export default function ChatButton({ chat, selected, onDelete }) {
   const router = useRouter()
+  const otherMembers = useOtherMembers(chat)
 
   // set the default chat name to list of first names if group and full name if direct5
   const chatName = chat.isGroup
-    ? chat.members
-        .filter((member) => member.id !== currentUser.id)
+    ? otherMembers
         .map((member) => member.name.split(" ")[0])
         .join(", ")
         .replace(/, ([^,]*)$/, " & $1")
-    : chat.members.filter((member) => member.id !== currentUser.id)[0].name
+    : otherMembers[0].name
 
   const handleClick = useCallback(() => {
     router.push(`/chats/${chat.id}`)
