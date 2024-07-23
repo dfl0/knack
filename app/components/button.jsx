@@ -25,22 +25,22 @@ const Button = ({ children, variant, uniform, disabled, className, ...props }) =
           text-zinc-900
           hover:bg-zinc-100/75`,
         variant === "outline" &&
-          `bg-white
+          `bg-transparent
           text-zinc-900
           ring-1
           ring-inset
           ring-zinc-200
           hover:bg-zinc-100`,
         variant === "invisible" &&
-          `bg-white
+          `bg-transparent
           text-zinc-900
           hover:bg-zinc-100`,
         variant === "subtle" &&
-          `bg-white
-          text-zinc-600
-          hover:bg-white
-          hover:text-zinc-950`,
-        uniform && "p-1 h-8 w-8",
+          `bg-transparent
+          text-zinc-500
+          hover:bg-transparent
+          hover:text-zinc-900`,
+        uniform && "h-auto w-auto shrink-0 p-1",
         disabled && "pointer-events-none opacity-50",
         className
       )}
