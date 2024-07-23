@@ -2,33 +2,10 @@
 
 import Select, { components } from "react-select"
 import { ChevronDown, X } from "lucide-react"
-// import { useState } from "react"
 
 import { cn } from "@/lib/utils"
 
-// import Input from "@components/input"
-// import Button from "@components/button"
-
 const SearchSelect = ({ placeholder, disabled, value, onChange, options, errors, className, ...props }) => {
-  // const [isOpen, setIsOpen] = useState(false)
-
-  // const toggleOpen = () => {
-  //   if (isOpen) {
-  //     setIsOpen(false)
-  //   } else {
-  //     setIsOpen(true)
-  //   }
-  // }
-
-  // const handleChange = () => {
-  //   setIsOpen(true)
-  // }
-
-  // const handleMouseDown = (e) => {
-  //   e.preventDefault()
-  //   toggleOpen()
-  // }
-
   const IndicatorSeparator = () => {
     return <></>
   }
@@ -50,17 +27,6 @@ const SearchSelect = ({ placeholder, disabled, value, onChange, options, errors,
   }
 
   return (
-    // <div className={cn("relative", className)}>
-    //   <Input
-    //     className="w-full"
-    //     onChange={handleChange}
-    //     onBlur={() => setIsOpen(false)}
-    //     {...props}
-    //   />
-    //   {isOpen && (
-    //     <div className="absolute top-[100%] h-32 w-full translate-y-1 rounded-xl border border-zinc-200 bg-white"></div>
-    //   )}
-    // </div>
     <Select
       placeholder={placeholder}
       isDisabled={disabled}
