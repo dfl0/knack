@@ -18,7 +18,7 @@ const getCurrentUser = async () => {
         incomingFriendRequests: {
           include: { sender: true },
         },
-      }
+      },
     })
 
     if (!currentUser)
