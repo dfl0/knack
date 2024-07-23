@@ -1,26 +1,34 @@
+"use client"
+
 import { useState } from "react"
-import { UserPlus } from "lucide-react"
+import { SquarePen, UserPlus } from "lucide-react"
 
 import { cn } from "@/lib/utils"
+import useChat from "@/app/hooks/useChat"
 
 import Button from "@components/button"
 import ChatButton from "@components/chatbutton"
 import Modal from "@components/modal"
+import CreateChatForm from "@components/createchatform"
 import AddFriendForm from "@components/addfriendform"
 
-const ChatSidebar = ({ groups, current, setCurrent, className, ...props }) => {
-  const handleGroupClick = (groupId) => {
-    setCurrent(groupId)
-  }
+const ChatSidebar = ({ currentUser, initialChats, friends, className, ...props }) => {
+  const { chatId } = useChat()
 
+  const [chats, setChats] = useState(initialChats)
+  const [showCreateChat, setShowCreateChat] = useState(false)
   const [showAddFriend, setShowAddFriend] = useState(false)
 
-  const toggleAddFriend = () => {
-    if (showAddFriend) {
-      setShowAddFriend(false)
-    } else {
-      setShowAddFriend(true)
-    }
+  const handleCreateChat = (chat, isNew) => {
+    if (isNew) setChats((current) => [chat, ...current])
+    setShowCreateChat(false)
+  }
+
+  const handleDeleteChat = (chat) => {
+    const updatedChats = chats.filter(
+      (item) => item.id !== chat.id
+    )
+    setChats(updatedChats)
   }
 
   return (
@@ -31,7 +39,6 @@ const ChatSidebar = ({ groups, current, setCurrent, className, ...props }) => {
         flex-col
         items-center
         justify-start
-        gap-2
         border-r
         border-zinc-100
         px-4
@@ -40,27 +47,40 @@ const ChatSidebar = ({ groups, current, setCurrent, className, ...props }) => {
       )}
       {...props}
     >
-      <div className="flex w-full justify-start px-2 pt-4">
-        <span className="text-xs font-medium text-zinc-400">
-          Current Classes
+      <div className="flex w-full items-end justify-between">
+        <span className="text-sm font-medium text-zinc-400">
+          Chats
         </span>
+        <Button
+          variant="subtle"
+          onClick={() => setShowCreateChat(true)}
+          uniform
+          className="self-end"
+        >
+          <SquarePen size={16} className="shrink-0" />
+        </Button>
+        <Modal
+          isOpen={showCreateChat}
+          onClose={() => setShowCreateChat(false)}
+        >
+          <CreateChatForm
+            friends={friends}
+            onCreate={handleCreateChat}
+          />
+        </Modal>
       </div>
-      {groups.map((group) => (
+      {chats.map((chat) => (
         <ChatButton
-          key={group.id}
-          id={group.id}
-          title={group.name}
-          sub="Most recent message..."
-          active={current}
-          action={handleGroupClick}
+          key={chat.id}
+          chat={chat}
+          currentUser={currentUser}
+          selected={chat.id === chatId}
+          onDelete={handleDeleteChat}
         />
       ))}
-      <div className="flex w-full justify-start px-2 pt-4">
-        <span className="text-xs font-medium text-zinc-400">Friends</span>
-      </div>
       <Button
         variant="invisible"
-        onClick={toggleAddFriend}
+        onClick={() => setShowAddFriend(true)}
         className="h-9 w-full text-sm text-zinc-500"
       >
         Add Friend
@@ -68,7 +88,7 @@ const ChatSidebar = ({ groups, current, setCurrent, className, ...props }) => {
       </Button>
       <Modal
         isOpen={showAddFriend}
-        onClose={toggleAddFriend}
+        onClose={() => setShowAddFriend(false)}
       >
         <AddFriendForm />
       </Modal>
