@@ -30,6 +30,9 @@ export default function ChatButton({ chat, currentUser, selected, onDelete }) {
       .delete(`/api/chats/${chat.id}`)
       .catch((error) => console.log(error.response.data))
 
+    if (selected)
+      router.push("/chats")
+
     onDelete(chat)
   }
 
