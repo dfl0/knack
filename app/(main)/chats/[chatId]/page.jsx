@@ -1,8 +1,16 @@
-const ChatId = ({ params }) => {
-  const { chatId } = params
+import getChatFromId from "@/app/actions/getchatfromid"
+
+import Messages from "@components/messages"
+import ChatPrompt from "@components/chatprompt"
+
+const ChatId = async ({ params }) => {
+  const currentChat = await getChatFromId(params.chatId)
 
   return (
-    <div>Current chat id: {chatId}</div>
+    <div className="flex h-full w-full flex-col">
+      <Messages initialMessages={currentChat.messages} />
+      <ChatPrompt chat={currentChat} />
+    </div>
   )
 }
 
