@@ -1,10 +1,13 @@
-import * as React from "react"
+import { forwardRef } from "react"
 
 import { cn } from "@/lib/utils"
 
-const InputPrompt = React.forwardRef(({ className, ...props }, ref) => {
+const InputPrompt = forwardRef(({ className, ...props }, ref) => {
   return (
     <textarea
+      ref={ref}
+      rows="1"
+      autoComplete="off"
       className={cn(
         `h-10
         max-h-36
@@ -16,7 +19,7 @@ const InputPrompt = React.forwardRef(({ className, ...props }, ref) => {
         border
         border-zinc-200
         px-4
-        py-[0.625rem]
+        py-[0.57rem]
         text-sm
         text-zinc-950
         placeholder-zinc-400
@@ -27,12 +30,11 @@ const InputPrompt = React.forwardRef(({ className, ...props }, ref) => {
         focus:bg-zinc-100`,
         className
       )}
-      rows="1"
-      autoComplete="off"
-      ref={ref}
       {...props}
     ></textarea>
   )
 })
+
+InputPrompt.displayName = "InputPrompt"
 
 export default InputPrompt
