@@ -23,7 +23,6 @@ const ChatPrompt = ({ chat, className }) => {
           body: message,
           chatId: chat.id,
         })
-        .then((res) => console.log(res.data))
         .catch((error) => console.log(error.response.data))
 
       setMessage("")

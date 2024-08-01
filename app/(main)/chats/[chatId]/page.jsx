@@ -8,7 +8,10 @@ const ChatId = async ({ params }) => {
 
   return (
     <div className="flex h-full w-full flex-col">
-      <Messages initialMessages={currentChat.messages} />
+      <Messages
+        chatId={currentChat.id}
+        initialMessages={currentChat.messages}
+      />
       <ChatPrompt chat={currentChat} />
     </div>
   )

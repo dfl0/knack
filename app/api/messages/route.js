@@ -1,15 +1,13 @@
 import { NextResponse } from "next/server"
 
 import prisma from "@/app/libs/prismadb"
+import { pusherServer } from "@/app/libs/pusher"
 import getCurrentUser from "@/app/actions/getcurrentuser"
 
 export async function POST(req) {
   try {
     const { body, chatId } = await req.json()
     const currentUser = await getCurrentUser()
-
-    console.log(body)
-    console.log(chatId)
 
     const newMessage = await prisma.message.create({
       data: {
@@ -21,10 +19,13 @@ export async function POST(req) {
           connect: { id: chatId },
         },
       },
+      include: { sender: true },
     })
 
     if (!newMessage)
       return new NextResponse("Message could not be sent", { status: 400 })
+
+    await pusherServer.trigger(chatId, "messages:new", newMessage)
 
     return NextResponse.json(newMessage)
   } catch (error) {
