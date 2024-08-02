@@ -27,8 +27,11 @@ export async function POST(req) {
 
     await pusherServer.trigger(chatId, "messages:new", newMessage)
 
-    const updatedChat = await prisma.chat.findUnique({
+    const updatedChat = await prisma.chat.update({
       where: { id: chatId },
+      data: {
+        updatedAt: new Date(),
+      },
       include: {
         members: true,
         messages: {
@@ -38,10 +41,7 @@ export async function POST(req) {
     })
 
     for (const member of updatedChat.members) {
-      await pusherServer.trigger(member.email, "chat:update", {
-        id: chatId,
-        messages: updatedChat.messages,
-      })
+      await pusherServer.trigger(member.email, "chat:update", updatedChat)
     }
 
     return NextResponse.json(newMessage)

@@ -32,15 +32,10 @@ const ChatSidebar = ({ initialChats, friends, className, ...props }) => {
     pusherClient.subscribe(currentUserEmail)
 
     const updateChatHandler = (updatedChat) => {
-      setChats((current) => current.map((chat) => {
-        if (chat.id === updatedChat.id)
-          return {
-            ...chat,
-            messages: updatedChat.messages,
-          }
-
-        return chat
-      }))
+      setChats((current) => {
+        const oldChats = current.filter((chat) => chat.id !== updatedChat.id)
+        return [updatedChat, ...oldChats]
+      })
     }
 
     pusherClient.bind("chat:update", updateChatHandler)
