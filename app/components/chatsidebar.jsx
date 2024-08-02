@@ -1,10 +1,12 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo, useEffect } from "react"
+import { useSession } from "next-auth/react"
 import { SquarePen, UserPlus } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import useChat from "@/app/hooks/useChat"
+import { pusherClient } from "@/app/libs/pusher"
 
 import Button from "@components/button"
 import ChatButton from "@components/chatbutton"
@@ -13,11 +15,41 @@ import CreateChatForm from "@components/createchatform"
 import AddFriendForm from "@components/addfriendform"
 
 const ChatSidebar = ({ initialChats, friends, className, ...props }) => {
+  const session = useSession()
   const { chatId } = useChat()
 
   const [chats, setChats] = useState(initialChats)
   const [showCreateChat, setShowCreateChat] = useState(false)
   const [showAddFriend, setShowAddFriend] = useState(false)
+
+  const currentUserEmail = useMemo(() => {
+    return session?.data?.user?.email
+  }, [session?.data?.user?.email])
+
+  useEffect(() => {
+    if (!currentUserEmail) return
+
+    pusherClient.subscribe(currentUserEmail)
+
+    const updateChatHandler = (updatedChat) => {
+      setChats((current) => current.map((chat) => {
+        if (chat.id === updatedChat.id)
+          return {
+            ...chat,
+            messages: updatedChat.messages,
+          }
+
+        return chat
+      }))
+    }
+
+    pusherClient.bind("chat:update", updateChatHandler)
+
+    return () => {
+      pusherClient.unsubscribe(currentUserEmail)
+      pusherClient.unbind("chat:update", updateChatHandler)
+    }
+  }, [currentUserEmail])
 
   const handleCreateChat = (chat, isNew) => {
     if (isNew) setChats((current) => [chat, ...current])

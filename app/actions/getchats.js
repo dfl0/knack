@@ -19,6 +19,9 @@ const getChats = async () => {
       include: {
         members: true,
         messages: {
+          orderBy: {
+            sentAt: "asc",
+          },
           include: {
             sender: true,
           },
