@@ -38,10 +38,7 @@ export async function POST(req) {
     })
 
     for (const member of updatedChat.members) {
-      await pusherServer.trigger(member.email, "chat:update", {
-        id: chatId,
-        messages: updatedChat.messages,
-      })
+      await pusherServer.trigger(member.email, "chat:update", updatedChat)
     }
 
     return NextResponse.json(newMessage)
