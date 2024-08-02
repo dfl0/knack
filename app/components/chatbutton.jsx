@@ -63,7 +63,7 @@ export default function ChatButton({ chat, selected, onDelete }) {
           <span className="max-w-full truncate text-sm font-medium">
             {chatName}
           </span>
-          <span className="text-xs text-zinc-500">
+          <span className="max-w-full truncate text-xs text-zinc-500">
             {latestActivity}
           </span>
         </div>
