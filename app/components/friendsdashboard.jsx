@@ -47,6 +47,12 @@ const FriendsDashboard = ({ user, initialFriends }) => {
     setOutgoingFriendRequests(updatedOutgoingRequests)
   }
 
+  if (!user) {
+    return (
+      <div>Profile page</div>
+    )
+  }
+
   return (
     <div className="flex justify-center gap-16 pt-4">
       <div className="w-full">
