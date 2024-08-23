@@ -14,7 +14,7 @@ import Modal from "@components/modal"
 import CreateChatForm from "@components/createchatform"
 import AddFriendForm from "@components/addfriendform"
 
-const ChatSidebar = ({ initialChats, friends, className, ...props }) => {
+const ChatSidebar = ({ initialChats, updatedChatIds, friends, className, ...props }) => {
   const session = useSession()
   const { chatId } = useChat()
 
@@ -100,6 +100,7 @@ const ChatSidebar = ({ initialChats, friends, className, ...props }) => {
         <ChatButton
           key={chat.id}
           chat={chat}
+          hasNewMessage={updatedChatIds?.includes(chat.id)}
           selected={chat.id === chatId}
           onDelete={handleDeleteChat}
         />

@@ -36,16 +36,31 @@ export async function POST(req) {
         members: true,
         messages: {
           orderBy: { sentAt: "asc" },
+          include: { sender: true },
         },
       },
     })
 
     for (const member of updatedChat.members) {
       await pusherServer.trigger(member.email, "chat:update", updatedChat)
+
+      if (member.id !== currentUser.id) {
+        await prisma.user.update({
+          where: {
+            id: member.id,
+          },
+          data: {
+            updatedChatIds: member.updatedChatIds.includes(updatedChat.id)
+              ? member.updatedChatids
+              : [...member.updatedChatIds, updatedChat.id],
+          },
+        })
+      }
     }
 
     return NextResponse.json(newMessage)
   } catch (error) {
+    console.log(error)
     return new NextResponse(error, { status: 500 })
   }
 }

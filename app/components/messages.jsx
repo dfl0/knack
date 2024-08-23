@@ -1,5 +1,6 @@
 "use client"
 
+import axios from "axios"
 import { useState, useEffect, useRef } from "react"
 import { find } from "lodash"
 
@@ -33,8 +34,9 @@ const Messages = ({ chatId, initialMessages }) => {
   }, [chatId])
 
   useEffect(() => {
+    axios.post("/api/chats/seen", { chatId })
     bottomRef?.current?.scrollIntoView({ block: "end", behavior: "smooth" })
-  }, [messages])
+  }, [messages, chatId])
 
   return (
     <div className="flex-1 overflow-y-auto">

@@ -21,7 +21,8 @@ model User {
   chatIds String[] @db.ObjectId
   chats   Chat[]   @relation(fields: [chatIds], references: [id])
 
-  messages Message[]
+  messages       Message[]
+  updatedChatIds String[] @db.ObjectId
 }
 
 model FriendRequest {
