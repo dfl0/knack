@@ -13,7 +13,7 @@ export default async function ChatsLayout({ children }) {
     <main className="h-full w-full flex overflow-scroll">
       <ChatSidebar
         initialChats={chats}
-        updatedChatIds={currentUser.updatedChatIds}
+        updatedChatIds={currentUser?.updatedChatIds}
         friends={friends}
         className="w-72"
       />
