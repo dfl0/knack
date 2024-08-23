@@ -34,14 +34,14 @@ export default function NavBar({ currentUser, ...props }) {
       </div>
       <div className="mr-10 flex h-9 shrink-0 items-center rounded-xl bg-zinc-100 p-1">
         <Link href="/knacks">
-          <ToggleButton active={pathname === "/knacks"}>Knacks</ToggleButton>
+          <ToggleButton active={/^\/knacks([\/a-zA-Z0-9]*)?$/.test(pathname)}>Knacks</ToggleButton>
         </Link>
         <Link href="/chats">
-          <ToggleButton active={pathname === "/chats"}>Chats</ToggleButton>
+          <ToggleButton active={/^\/chats([\/a-zA-Z0-9]*)?$/.test(pathname)}>Chats</ToggleButton>
         </Link>
       </div>
       <div className="flex items-center gap-2">
-        <div className="text-sm">{currentUser.name}</div>
+        <div className="text-sm">{currentUser?.name}</div>
         <div className="h-8 w-8 overflow-hidden rounded-xl">
           <Link href="/profile">
             <Image
