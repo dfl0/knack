@@ -8,8 +8,8 @@ import Divider from "@components/divider"
 
 const FriendsDashboard = ({ user, initialFriends }) => {
   const [friends, setFriends] = useState(initialFriends)
-  const [incomingRequests, setIncomingFriendRequests] = useState(user.incomingFriendRequests)
-  const [outgoingRequests, setOutgoingFriendRequests] = useState(user.outgoingFriendRequests)
+  const [incomingRequests, setIncomingFriendRequests] = useState(user?.incomingFriendRequests)
+  const [outgoingRequests, setOutgoingFriendRequests] = useState(user?.outgoingFriendRequests)
 
   const handleRemove = (user) => {
     const updatedFriends = friends.filter(
