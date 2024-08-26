@@ -1,10 +1,8 @@
 "use client"
 
-import { FieldErrors, FieldValues, UseFormRegister } from "react-hook-form"
-
 import { cn } from "@/lib/utils"
 
-const Input = ({ id, options, register, errors, disabled, className, ...props }) => {
+const Input = ({ register, errors, disabled, className, ...props }) => {
   return (
     <input
       autoComplete="off"
