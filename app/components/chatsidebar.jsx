@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useEffect } from "react"
 import { useSession } from "next-auth/react"
-import { SquarePen, UserPlus } from "lucide-react"
+import { SquarePen } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 import useChat from "@/app/hooks/useChat"
@@ -12,7 +12,6 @@ import Button from "@components/button"
 import ChatButton from "@components/chatbutton"
 import Modal from "@components/modal"
 import CreateChatForm from "@components/createchatform"
-import AddFriendForm from "@components/addfriendform"
 
 const ChatSidebar = ({ initialChats, updatedChatIds, friends, className, ...props }) => {
   const session = useSession()
@@ -20,7 +19,6 @@ const ChatSidebar = ({ initialChats, updatedChatIds, friends, className, ...prop
 
   const [chats, setChats] = useState(initialChats)
   const [showCreateChat, setShowCreateChat] = useState(false)
-  const [showAddFriend, setShowAddFriend] = useState(false)
 
   const currentUserEmail = useMemo(() => {
     return session?.data?.user?.email
@@ -105,20 +103,6 @@ const ChatSidebar = ({ initialChats, updatedChatIds, friends, className, ...prop
           onDelete={handleDeleteChat}
         />
       ))}
-      <Button
-        variant="invisible"
-        onClick={() => setShowAddFriend(true)}
-        className="h-9 w-full text-sm text-zinc-500"
-      >
-        Add Friend
-        <UserPlus absoluteStrokeWidth className="h-4 w-4" />
-      </Button>
-      <Modal
-        isOpen={showAddFriend}
-        onClose={() => setShowAddFriend(false)}
-      >
-        <AddFriendForm />
-      </Modal>
     </div>
   )
 }

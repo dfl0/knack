@@ -1,15 +1,20 @@
 "use client"
 
 import { useState } from "react"
+import { UserPlus } from "lucide-react"
 
+import Button from "@components/button"
 import Friend from "@components/friend"
 import FriendRequest from "@components/friendrequest"
 import Divider from "@components/divider"
+import Modal from "@components/modal"
+import AddFriendForm from "@components/addfriendform"
 
 const FriendsDashboard = ({ user, initialFriends }) => {
   const [friends, setFriends] = useState(initialFriends)
   const [incomingRequests, setIncomingFriendRequests] = useState(user?.incomingFriendRequests)
   const [outgoingRequests, setOutgoingFriendRequests] = useState(user?.outgoingFriendRequests)
+  const [showAddFriend, setShowAddFriend] = useState(false)
 
   const handleRemove = (user) => {
     const updatedFriends = friends.filter(
@@ -56,7 +61,20 @@ const FriendsDashboard = ({ user, initialFriends }) => {
   return (
     <div className="flex justify-center gap-16 pt-4">
       <div className="w-full">
-        <div className="mb-2 text-xs font-medium text-zinc-400">Friends</div>
+        <div className="pb-1 flex items-end justify-between">
+          <span className="text-sm font-medium text-zinc-500">Friends</span>
+          <Button
+            variant="subtle"
+            onClick={() => setShowAddFriend(true)}
+            uniform
+            className="self-end"
+          >
+            <UserPlus size={16} className="shrink-0" />
+          </Button>
+          <Modal isOpen={showAddFriend} onClose={() => setShowAddFriend(false)}>
+            <AddFriendForm />
+          </Modal>
+        </div>
         <Divider />
         <div className="flex flex-col">
           {friends.map((friend) => (
@@ -68,7 +86,7 @@ const FriendsDashboard = ({ user, initialFriends }) => {
         </div>
       </div>
       <div className="w-full">
-        <div className="mb-2 text-xs font-medium text-zinc-400">Pending</div>
+        <span className="pb-1 text-sm font-medium text-zinc-500">Pending</span>
         <Divider />
         <div className="flex flex-col">
           {incomingRequests.map((request) => (
