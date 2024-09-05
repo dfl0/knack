@@ -14,24 +14,18 @@ const FriendRequest = ({ user, type, onAccept, onReject, onCancel, className, ..
     axios
       .post("/api/friend/accept", user)
       .catch((error) => toast.error(error.response.data))
-
-    onAccept(user)
   }
 
   const handleReject = () => {
     axios
       .post("/api/friend/reject", user)
       .catch((error) => toast.error(error.response.data))
-
-    onReject(user)
   }
 
   const handleCancel = () => {
     axios
       .post("/api/friend/cancel", user)
       .catch((error) => toast.error(error.response.data))
-
-    onCancel(user)
   }
 
   return (

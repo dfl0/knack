@@ -15,6 +15,9 @@ const getFriends = async () => {
           has: currentUser.id,
         },
       },
+      orderBy: {
+        name: "asc",
+      },
     })
 
     if (!friends)

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 
 import prisma from "@/app/libs/prismadb"
+import { pusherServer } from "@/app/libs/pusher"
 import getCurrentUser from "@/app/actions/getcurrentuser"
 
 export async function POST(req, { params }) {
@@ -50,35 +51,10 @@ export async function POST(req, { params }) {
       if (!outgoingRequest)
         return new NextResponse("Friend request could not be sent", { status: 400 })
 
+      await pusherServer.trigger(outgoingRequest.sender.email, "request:new", outgoingRequest)
+      await pusherServer.trigger(outgoingRequest.recipient.email, "request:new", outgoingRequest)
+
       return NextResponse.json(outgoingRequest)
-    } else if (action === "remove") {
-      const friend = body
-      const currentUser = await getCurrentUser()
-
-      const { friendIds: friendFriendIds } = await prisma.user.findUnique({
-        where: { id: friend.id },
-        select: { friendIds: true },
-      })
-
-      await prisma.user.update({
-        where: { id: currentUser.id },
-        data: {
-          friendIds: {
-            set: currentUser.friendIds.filter((id) => id !== friend.id),
-          },
-        },
-      })
-
-      await prisma.user.update({
-        where: { id: friend.id },
-        data: {
-          friendIds: {
-            set: friendFriendIds.filter((id) => id !== currentUser.id),
-          },
-        },
-      })
-
-      return NextResponse.json(friend)
     } else if (action === "accept") {
       const sender = body
 
@@ -125,10 +101,17 @@ export async function POST(req, { params }) {
             recipientId: currentUser.id,
           },
         },
+        include: {
+          sender: true,
+          recipient: true,
+        },
       })
 
       if (!acceptedFriendRequest)
         return new NextResponse("Friend request could not be accepted", { status: 400 })
+
+      await pusherServer.trigger(currentUser.email, "request:accept", acceptedFriendRequest)
+      await pusherServer.trigger(sender.email, "request:accept", acceptedFriendRequest)
 
       return NextResponse.json(acceptedFriendRequest)
     } else if (action === "reject") {
@@ -152,6 +135,9 @@ export async function POST(req, { params }) {
       if (!rejectedRequest)
         return new NextResponse("Friend request could not be rejected", { status: 400 })
 
+      await pusherServer.trigger(currentUser.email, "request:reject", rejectedRequest)
+      await pusherServer.trigger(rejectedRequest.sender.email, "request:reject", rejectedRequest)
+
       return NextResponse.json(rejectedRequest)
     } else if (action === "cancel") {
       const userId = body.id
@@ -174,7 +160,41 @@ export async function POST(req, { params }) {
       if (!cancelledRequest)
         return new NextResponse("Friend request could not be cancelled", { status: 400 })
 
+      await pusherServer.trigger(currentUser.email, "request:cancel", cancelledRequest)
+      await pusherServer.trigger(cancelledRequest.recipient.email, "request:cancel", cancelledRequest)
+
       return NextResponse.json(cancelledRequest)
+    } else if (action === "remove") {
+      const friend = body
+      const currentUser = await getCurrentUser()
+
+      const { friendIds: friendFriendIds } = await prisma.user.findUnique({
+        where: { id: friend.id },
+        select: { friendIds: true },
+      })
+
+      await prisma.user.update({
+        where: { id: currentUser.id },
+        data: {
+          friendIds: {
+            set: currentUser.friendIds.filter((id) => id !== friend.id),
+          },
+        },
+      })
+
+      await prisma.user.update({
+        where: { id: friend.id },
+        data: {
+          friendIds: {
+            set: friendFriendIds.filter((id) => id !== currentUser.id),
+          },
+        },
+      })
+
+      await pusherServer.trigger(currentUser.email, "friend:remove", friend)
+      await pusherServer.trigger(friend.email, "friend:remove", currentUser)
+
+      return NextResponse.json(friend)
     } else {
       return new NextResponse(`${action} is not a valid action`, { status: 500 })
     }

@@ -11,8 +11,6 @@ const Friend = ({ user, onRemove, className, ...props }) => {
     axios
       .post("/api/friend/remove", user)
       .catch((error) => toast.error(error.response.data))
-
-    onRemove(user)
   }
 
   return (

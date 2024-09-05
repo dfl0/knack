@@ -1,7 +1,10 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useMemo, useEffect } from "react"
+import { useSession } from "next-auth/react"
 import { UserPlus } from "lucide-react"
+
+import { pusherClient } from "@/app/libs/pusher"
 
 import Button from "@components/button"
 import Friend from "@components/friend"
@@ -11,46 +14,116 @@ import Modal from "@components/modal"
 import AddFriendForm from "@components/addfriendform"
 
 const FriendsDashboard = ({ user, initialFriends }) => {
+  const session = useSession()
   const [friends, setFriends] = useState(initialFriends)
-  const [incomingRequests, setIncomingFriendRequests] = useState(user?.incomingFriendRequests)
-  const [outgoingRequests, setOutgoingFriendRequests] = useState(user?.outgoingFriendRequests)
+  const [incomingRequests, setIncomingRequests] = useState(user?.incomingFriendRequests)
+  const [outgoingRequests, setOutgoingRequests] = useState(user?.outgoingFriendRequests)
   const [showAddFriend, setShowAddFriend] = useState(false)
 
-  const handleRemove = (user) => {
-    const updatedFriends = friends.filter(
-      (friend) => friend.id != user.id
-    )
-    setFriends(updatedFriends)
-  }
+  const currentUserEmail = useMemo(() => {
+    return session.data?.user.email
+  }, [session])
 
-  const handleAccept = (user) => {
-    let i = 0
-    while (i < friends.length && user.name > friends[i]?.name) i++
-    setFriends([
-      ...friends.slice(0, i),
-      user,
-      ...friends.slice(i)
-    ])
+  useEffect(() => {
+    if (!currentUserEmail) return
 
-    const updatedIncomingRequests = incomingRequests.filter(
-      (request) => request.sender.id != user.id
-    )
-    setIncomingFriendRequests(updatedIncomingRequests)
-  }
+    pusherClient.subscribe(currentUserEmail)
 
-  const handleReject = (user) => {
-    const updatedIncomingRequests = incomingRequests.filter(
-      (request) => request.sender.id != user.id
-    )
-    setIncomingFriendRequests(updatedIncomingRequests)
-  }
+    const newRequestHandler = (newRequest) => {
+      if (currentUserEmail === newRequest.sender.email) {
+        setOutgoingRequests([...outgoingRequests, newRequest])
+      } else if (currentUserEmail === newRequest.recipient.email) {
+        setIncomingRequests([...incomingRequests, newRequest])
+      }
+    }
 
-  const handleCancel = (user) => {
-    const updatedOutgoingRequests = outgoingRequests.filter(
-      (request) => request.recipient.id != user.id
-    )
-    setOutgoingFriendRequests(updatedOutgoingRequests)
-  }
+    const acceptRequestHandler = (acceptedRequest) => {
+      if (currentUserEmail === acceptedRequest.recipient.email) {
+        setIncomingRequests(
+          incomingRequests.filter(
+            (request) => request.sender.id !== acceptedRequest.sender.id
+          )
+        )
+
+        let i = 0
+        while (i < friends.length && request.sender.name > friends[i]?.name) i++
+        setFriends([
+          ...friends.slice(0, i),
+          acceptedRequest.sender,
+          ...friends.slice(i)
+        ])
+      } else if (currentUserEmail === acceptedRequest.sender.email) {
+        setOutgoingRequests(
+          outgoingRequests.filter(
+            (request) => request.recipient.id !== acceptedRequest.recipient.id
+          )
+        )
+
+        let i = 0
+        while (i < friends.length && request.recipient.name > friends[i]?.name) i++
+        setFriends([
+          ...friends.slice(0, i),
+          acceptedRequest.recipient,
+          ...friends.slice(i)
+        ])
+      }
+    }
+
+    const rejectRequestHandler = (rejectedRequest) => {
+      if (currentUserEmail === rejectedRequest.recipient.email) {
+        setIncomingRequests(
+          incomingRequests.filter(
+            (request) => request.sender.id !== rejectedRequest.sender.id
+          )
+        )
+      } else if (currentUserEmail === rejectedRequest.sender.email) {
+        setOutgoingRequests(
+          outgoingRequests.filter(
+            (request) => request.recipient.id !== rejectedRequest.recipient.id
+          )
+        )
+      }
+    }
+
+    const cancelRequestHandler = (cancelledRequest) => {
+      if (currentUserEmail === cancelledRequest.sender.email) {
+        setOutgoingRequests(
+          outgoingRequests.filter(
+            (request) => request.recipient.id !== cancelledRequest.recipient.id
+          )
+        )
+      } else if (currentUserEmail === cancelledRequest.recipient.email) {
+        setIncomingRequests(
+          incomingRequests.filter(
+            (request) => request.sender.id !== cancelledRequest.sender.id
+          )
+        )
+      }
+    }
+
+    const removeFriendHandler = (user) => {
+      setFriends(
+        friends.filter(
+          (friend) => friend.id !== user.id
+        )
+      )
+    }
+
+    pusherClient.bind("request:new", newRequestHandler)
+    pusherClient.bind("request:accept", acceptRequestHandler)
+    pusherClient.bind("request:reject", rejectRequestHandler)
+    pusherClient.bind("request:cancel",cancelRequestHandler)
+    pusherClient.bind("friend:remove", removeFriendHandler)
+
+    return () => {
+      pusherClient.unsubscribe(currentUserEmail)
+      pusherClient.unbind("request:new", newRequestHandler)
+      pusherClient.unbind("request:accept", acceptRequestHandler)
+      pusherClient.unbind("request:reject", rejectRequestHandler)
+      pusherClient.unbind("request:cancel", cancelRequestHandler)
+      pusherClient.unbind("friend:remove", removeFriendHandler)
+    }
+  }, [currentUserEmail, outgoingRequests, incomingRequests, friends])
 
   if (!user) {
     return (
@@ -79,7 +152,7 @@ const FriendsDashboard = ({ user, initialFriends }) => {
         <div className="flex flex-col">
           {friends.map((friend) => (
             <div key={friend.id}>
-              <Friend user={friend} onRemove={handleRemove} />
+              <Friend user={friend} />
               <Divider />
             </div>
           ))}
@@ -94,8 +167,6 @@ const FriendsDashboard = ({ user, initialFriends }) => {
               <FriendRequest
                 user={request.sender}
                 type="incoming"
-                onAccept={handleAccept}
-                onReject={handleReject}
               />
               <Divider />
             </div>
@@ -107,7 +178,6 @@ const FriendsDashboard = ({ user, initialFriends }) => {
                 <FriendRequest
                   user={request.recipient}
                   type="outgoing"
-                  onCancel={handleCancel}
                 />
                 <Divider />
               </div>
