@@ -39,6 +39,7 @@ export default function ChatButton({ chat, hasNewMessage, selected, onDelete }) 
 
     return () => {
       pusherClient.unsubscribe(currentUserEmail)
+      pusherClient.unbind("chat:update", updateChatIndicator)
     }
   }, [currentUserEmail, chat, currentChatId])
 
