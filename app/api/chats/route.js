@@ -13,6 +13,8 @@ export async function POST(req) {
       ...otherMembers.map((member) => member.value),
     ].sort()
 
+    const messageBody = body.message
+
     if (!currentUser)
       return new NextResponse("Could not get current user", { status: 401 })
 
@@ -27,8 +29,21 @@ export async function POST(req) {
       },
     })
 
-    if (existingChat)
+    if (existingChat) {
+      await prisma.message.create({
+        data: {
+          body: messageBody,
+          sender: {
+            connect: { id: currentUser.id },
+          },
+          chat: {
+            connect: { id: existingChat.id },
+          },
+        },
+      })
+
       return NextResponse.json(existingChat)
+    }
 
     const newChat = await prisma.chat.create({
       data: {
@@ -42,8 +57,17 @@ export async function POST(req) {
       },
     })
 
-    if (!newChat)
-      return new NextResponse("Chat could not be created", { status: 400 })
+    await prisma.message.create({
+      data: {
+        body: messageBody,
+        sender: {
+          connect: { id: currentUser.id },
+        },
+        chat: {
+          connect: { id: newChat.id },
+        },
+      },
+    })
 
     return NextResponse.json(newChat, { status: 201 })
   } catch (error) {
