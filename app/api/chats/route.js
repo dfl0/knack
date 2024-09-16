@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 
 import prisma from "@/app/libs/prismadb"
+import { pusherServer } from "@/app/libs/pusher"
 import getCurrentUser from "@/app/actions/getcurrentuser"
 
 export async function POST(req) {
@@ -13,8 +14,6 @@ export async function POST(req) {
       ...otherMembers.map((member) => member.value),
     ].sort()
 
-    const messageBody = body.message
-
     if (!currentUser)
       return new NextResponse("Could not get current user", { status: 401 })
 
@@ -24,26 +23,11 @@ export async function POST(req) {
           equals: memberIds,
         },
       },
-      include: {
-        members: true,
-      },
+      include: { messages: true },
     })
 
-    if (existingChat) {
-      await prisma.message.create({
-        data: {
-          body: messageBody,
-          sender: {
-            connect: { id: currentUser.id },
-          },
-          chat: {
-            connect: { id: existingChat.id },
-          },
-        },
-      })
-
+    if (existingChat)
       return NextResponse.json(existingChat)
-    }
 
     const newChat = await prisma.chat.create({
       data: {
@@ -54,20 +38,12 @@ export async function POST(req) {
       },
       include: {
         members: true,
+        messages: true,
       },
     })
 
-    await prisma.message.create({
-      data: {
-        body: messageBody,
-        sender: {
-          connect: { id: currentUser.id },
-        },
-        chat: {
-          connect: { id: newChat.id },
-        },
-      },
-    })
+    for (const member of newChat.members)
+      await pusherServer.trigger(member.email, "chat:new", newChat)
 
     return NextResponse.json(newChat, { status: 201 })
   } catch (error) {

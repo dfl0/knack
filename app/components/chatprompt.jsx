@@ -2,7 +2,6 @@
 
 import axios from "axios"
 import { useState, useEffect, useRef } from "react"
-import { useRouter } from "next/navigation"
 import { toast } from "react-hot-toast"
 
 import { Send } from "lucide-react"
@@ -13,10 +12,9 @@ import useOtherMembers from "@/app/hooks/useOtherMembers"
 import Button from "@components/button"
 import InputPrompt from "@components/inputprompt"
 
-const ChatPrompt = ({ chat, members, className }) => {
+const ChatPrompt = ({ chat, members, handleNewChat, className }) => {
   const [message, setMessage] = useState("")
 
-  const router = useRouter()
   const otherMembers = useOtherMembers(chat ? chat : { members })
   const messagePromptRef = useRef(null)
 
@@ -28,22 +26,14 @@ const ChatPrompt = ({ chat, members, className }) => {
             body: message,
             chatId: chat.id,
           })
-          .catch((error) => console.log(error.response.data))
-      } else {
-        if (members.length > 0) {
-          axios
-            .post("/api/chats", {
-              members,
-              message,
-            })
-            .then((res) => router.push(`/chats/${res.data.id}`))
-            .catch((error) => toast.error("Failed to create new chat"))
-        } else {
-          toast.error("Please select at least one friend")
-        }
-      }
+          .catch((error) => toast.error("Failed to send message"))
 
-      setMessage("")
+        setMessage("")
+      } else {
+        // if no chat param is passed, new chat will be created with selected members
+        handleNewChat(message)
+        setMessage("")
+      }
     }
   }
 
