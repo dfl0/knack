@@ -1,7 +1,9 @@
 "use client"
 
 import axios from "axios"
-import React, { useState, useEffect, useRef } from "react"
+import { useState, useEffect, useRef } from "react"
+import { toast } from "react-hot-toast"
+
 import { Send } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -10,20 +12,23 @@ import useOtherMembers from "@/app/hooks/useOtherMembers"
 import Button from "@components/button"
 import InputPrompt from "@components/inputprompt"
 
-const ChatPrompt = ({ chat, className }) => {
+const ChatPrompt = ({ chat, handleNewChat, className }) => {
   const [message, setMessage] = useState("")
 
+  const otherMembers = useOtherMembers(chat ? chat : { members: [] })
   const messagePromptRef = useRef(null)
-  const otherMembers = useOtherMembers(chat)
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if (message.trim()) {
+      // if no chat param is passed, new chat will be created with selected members
+      const chatId = chat ? chat.id : await handleNewChat()
+
       axios
         .post("/api/messages", {
           body: message,
-          chatId: chat.id,
+          chatId,
         })
-        .catch((error) => console.log(error.response.data))
+        .catch((error) => toast.error("Failed to send message"))
 
       setMessage("")
     }
@@ -40,11 +45,13 @@ const ChatPrompt = ({ chat, className }) => {
     }
   }
 
-  const chatPlaceholder = !chat.isGroup
-    ? otherMembers[0].name
-    : chat.name
-      ? chat.name
-      : "group"
+  const chatPlaceholder = chat
+    ? !chat.isGroup
+      ? otherMembers[0].name
+      : chat.name
+        ? chat.name
+        : "group"
+    : "new chat"
 
   useEffect(() => {
     messagePromptRef.current.style.height = "auto"
@@ -54,7 +61,7 @@ const ChatPrompt = ({ chat, className }) => {
   return (
     <div
       className={cn(
-        "flex w-full shrink-0 items-end gap-2 border-t border-zinc-100 py-6 px-4",
+        "flex w-full shrink-0 items-end gap-2 border-t border-zinc-100 px-4 py-6",
         className
       )}
     >

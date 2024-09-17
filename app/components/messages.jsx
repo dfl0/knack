@@ -4,24 +4,37 @@ import axios from "axios"
 import { useState, useEffect, useRef } from "react"
 import { find } from "lodash"
 
+import getChatFromId from "@/app/actions/getchatfromid"
 import { pusherClient } from "@/app/libs/pusher"
 
 import Message from "@components/message"
 
-const Messages = ({ chatId, initialMessages }) => {
-  const [messages, setMessages] = useState(initialMessages)
+const Messages = ({ chatId }) => {
+  const [messages, setMessages] = useState(null)
   const bottomRef = useRef(null)
 
   useEffect(() => {
+    const fetchMessages = async () => {
+      try {
+        const chat = await getChatFromId(chatId)
+        setMessages(chat.messages)
+      } catch (error) {
+        console.error("Failed to fetch messages")
+      }
+    }
+
+    fetchMessages()
+    bottomRef.current?.scrollIntoView({ block: "end" })
+    axios.post("/api/chats/seen", { chatId })
+
     pusherClient.subscribe(chatId)
-    bottomRef?.current?.scrollIntoView({ block: "end" })
 
     const newMessageHandler = (message) => {
       setMessages((current) => {
         if (find(current, { id: message.id }))
           return current
 
-        return [...current, message]
+        return current ? [...current, message] : [message]
       })
     }
 
@@ -34,24 +47,27 @@ const Messages = ({ chatId, initialMessages }) => {
   }, [chatId])
 
   useEffect(() => {
-    axios.post("/api/chats/seen", { chatId })
-    bottomRef?.current?.scrollIntoView({ block: "end", behavior: "smooth" })
-  }, [messages, chatId])
+    bottomRef.current?.scrollIntoView({ block: "end", behavior: "smooth" })
+  }, [messages])
 
   return (
     <div className="flex-1 overflow-y-auto">
-      {messages.map((message, i) => (
-        <Message
-          key={message.id}
-          sender={message.sender}
-          body={message.body}
-          sentAt={message.sentAt}
-          consecutive={
-            i > 0 &&
-            messages.slice(i - 1)[0].sender.email === messages.slice(i)[0].sender.email // check if previous message was sent by the same user
-          }
-        />
-      ))}
+      {messages ? (
+        messages.map((message, i) => (
+          <Message
+            key={message.id}
+            sender={message.sender}
+            body={message.body}
+            sentAt={message.sentAt}
+            consecutive={
+              i > 0 &&
+              messages.slice(i - 1)[0].sender.email === messages.slice(i)[0].sender.email // check if previous message was sent by the same user
+            }
+          />
+        ))
+      ) : (
+        <div>Loading...</div>
+      )}
       <div ref={bottomRef} className="pt-6" />
     </div>
   )

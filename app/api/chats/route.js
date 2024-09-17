@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server"
 
 import prisma from "@/app/libs/prismadb"
+import { pusherServer } from "@/app/libs/pusher"
 import getCurrentUser from "@/app/actions/getcurrentuser"
 
 export async function POST(req) {
@@ -22,9 +23,7 @@ export async function POST(req) {
           equals: memberIds,
         },
       },
-      include: {
-        members: true,
-      },
+      include: { messages: true },
     })
 
     if (existingChat)
@@ -39,11 +38,12 @@ export async function POST(req) {
       },
       include: {
         members: true,
+        messages: true,
       },
     })
 
-    if (!newChat)
-      return new NextResponse("Chat could not be created", { status: 400 })
+    for (const member of newChat.members)
+      await pusherServer.trigger(member.email, "chat:update", newChat)
 
     return NextResponse.json(newChat, { status: 201 })
   } catch (error) {

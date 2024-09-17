@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from "react"
 import { useSession } from "next-auth/react"
+import { useRouter } from "next/navigation"
 import { SquarePen } from "lucide-react"
 
 import { cn } from "@/lib/utils"
@@ -10,15 +11,13 @@ import { pusherClient } from "@/app/libs/pusher"
 
 import Button from "@components/button"
 import ChatButton from "@components/chatbutton"
-import Modal from "@components/modal"
-import CreateChatForm from "@components/createchatform"
 
 const ChatSidebar = ({ initialChats, updatedChatIds, friends, className, ...props }) => {
   const session = useSession()
+  const router = useRouter()
   const { chatId } = useChat()
 
   const [chats, setChats] = useState(initialChats)
-  const [showCreateChat, setShowCreateChat] = useState(false)
 
   const currentUserEmail = useMemo(() => {
     return session?.data?.user?.email
@@ -42,12 +41,7 @@ const ChatSidebar = ({ initialChats, updatedChatIds, friends, className, ...prop
       pusherClient.unsubscribe(currentUserEmail)
       pusherClient.unbind("chat:update", updateChatHandler)
     }
-  }, [currentUserEmail])
-
-  const handleCreateChat = (chat, isNew) => {
-    if (isNew) setChats((current) => [chat, ...current])
-    setShowCreateChat(false)
-  }
+  }, [currentUserEmail, chats])
 
   const handleDeleteChat = (chat) => {
     const updatedChats = chats.filter(
@@ -78,21 +72,12 @@ const ChatSidebar = ({ initialChats, updatedChatIds, friends, className, ...prop
         </span>
         <Button
           variant="subtle"
-          onClick={() => setShowCreateChat(true)}
+          onClick={() => router.push("/chats/new")}
           uniform
           className="self-end"
         >
           <SquarePen size={16} className="shrink-0" />
         </Button>
-        <Modal
-          isOpen={showCreateChat}
-          onClose={() => setShowCreateChat(false)}
-        >
-          <CreateChatForm
-            friends={friends}
-            onCreate={handleCreateChat}
-          />
-        </Modal>
       </div>
       {chats.map((chat) => (
         <ChatButton
