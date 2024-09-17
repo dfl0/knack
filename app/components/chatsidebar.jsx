@@ -35,19 +35,13 @@ const ChatSidebar = ({ initialChats, updatedChatIds, friends, className, ...prop
       })
     }
 
-    const newChatHandler = (newChat) => {
-      setChats((current) => [newChat, ...current])
-    }
-
     pusherClient.bind("chat:update", updateChatHandler)
-    pusherClient.bind("chat:new", newChatHandler)
 
     return () => {
       pusherClient.unsubscribe(currentUserEmail)
       pusherClient.unbind("chat:update", updateChatHandler)
-      pusherClient.unbind("chat:new", newChatHandler)
     }
-  }, [currentUserEmail])
+  }, [currentUserEmail, chats])
 
   const handleDeleteChat = (chat) => {
     const updatedChats = chats.filter(

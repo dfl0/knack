@@ -12,28 +12,25 @@ import useOtherMembers from "@/app/hooks/useOtherMembers"
 import Button from "@components/button"
 import InputPrompt from "@components/inputprompt"
 
-const ChatPrompt = ({ chat, members, handleNewChat, className }) => {
+const ChatPrompt = ({ chat, handleNewChat, className }) => {
   const [message, setMessage] = useState("")
 
-  const otherMembers = useOtherMembers(chat ? chat : { members })
+  const otherMembers = useOtherMembers(chat ? chat : { members: [] })
   const messagePromptRef = useRef(null)
 
-  const onSubmit = () => {
+  const onSubmit = async () => {
     if (message.trim()) {
-      if (chat) {
-        axios
-          .post("/api/messages", {
-            body: message,
-            chatId: chat.id,
-          })
-          .catch((error) => toast.error("Failed to send message"))
+      // if no chat param is passed, new chat will be created with selected members
+      const chatId = chat ? chat.id : await handleNewChat()
 
-        setMessage("")
-      } else {
-        // if no chat param is passed, new chat will be created with selected members
-        handleNewChat(message)
-        setMessage("")
-      }
+      axios
+        .post("/api/messages", {
+          body: message,
+          chatId,
+        })
+        .catch((error) => toast.error("Failed to send message"))
+
+      setMessage("")
     }
   }
 

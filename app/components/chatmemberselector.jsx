@@ -9,7 +9,7 @@ const ChatMemberSelector = ({ friends, members, handleChange }) => {
         <span className="text-sm hover:cursor-default text-zinc-900">To:</span>
         <SearchSelect
           placeholder="Select one or more friends..."
-          options={friends.map((friend) => ({
+          options={friends?.map((friend) => ({
             value: friend.id,
             label: friend.name,
           }))}
