@@ -46,7 +46,7 @@ const FriendsDashboard = ({ user, initialFriends }) => {
         )
 
         let i = 0
-        while (i < friends.length && request.sender.name > friends[i]?.name) i++
+        while (i < friends.length && acceptedRequest.sender.name > friends[i]?.name) i++
         setFriends([
           ...friends.slice(0, i),
           acceptedRequest.sender,
@@ -60,7 +60,7 @@ const FriendsDashboard = ({ user, initialFriends }) => {
         )
 
         let i = 0
-        while (i < friends.length && request.recipient.name > friends[i]?.name) i++
+        while (i < friends.length && acceptedRequest.recipient.name > friends[i]?.name) i++
         setFriends([
           ...friends.slice(0, i),
           acceptedRequest.recipient,
