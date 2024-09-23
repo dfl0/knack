@@ -35,20 +35,25 @@ const ChatSidebar = ({ initialChats, updatedChatIds, friends, className, ...prop
       })
     }
 
+    const deleteChatHandler = (deletedChat) => {
+      const remainingChats = chats.filter(
+        (item) => item.id !== deletedChat.id
+      )
+      setChats(remainingChats)
+
+      if (deletedChat.id === chatId)
+        router.push("/chats")
+    }
+
     pusherClient.bind("chat:update", updateChatHandler)
+    pusherClient.bind("chat:deleted", deleteChatHandler)
 
     return () => {
       pusherClient.unsubscribe(currentUserEmail)
       pusherClient.unbind("chat:update", updateChatHandler)
+      pusherClient.bind("chat:deleted", deleteChatHandler)
     }
-  }, [currentUserEmail, chats])
-
-  const handleDeleteChat = (chat) => {
-    const updatedChats = chats.filter(
-      (item) => item.id !== chat.id
-    )
-    setChats(updatedChats)
-  }
+  }, [currentUserEmail, chats, chatId, router])
 
   return (
     <div
@@ -85,7 +90,6 @@ const ChatSidebar = ({ initialChats, updatedChatIds, friends, className, ...prop
           chat={chat}
           hasNewMessage={updatedChatIds?.includes(chat.id)}
           selected={chat.id === chatId}
-          onDelete={handleDeleteChat}
         />
       ))}
     </div>

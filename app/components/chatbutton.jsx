@@ -13,7 +13,7 @@ import { pusherClient } from "@/app/libs/pusher"
 
 import Button from "@components/button"
 
-export default function ChatButton({ chat, hasNewMessage, selected, onDelete }) {
+export default function ChatButton({ chat, hasNewMessage, selected }) {
   const session = useSession()
   const router = useRouter()
   const otherMembers = useOtherMembers(chat)
@@ -61,12 +61,7 @@ export default function ChatButton({ chat, hasNewMessage, selected, onDelete }) 
 
     axios
       .delete(`/api/chats/${chat.id}`)
-      .catch((error) => console.log(error.response.data))
-
-    if (selected)
-      router.push("/chats")
-
-    onDelete(chat)
+      .catch((error) => console.error(error.message))
   }
 
   const latestMessage = useMemo(() => {
