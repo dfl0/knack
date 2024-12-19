@@ -2,10 +2,11 @@ import { forwardRef } from "react"
 
 import { cn } from "@/lib/utils"
 
-const InputPrompt = forwardRef(({ className, ...props }, ref) => {
+const InputPrompt = forwardRef(({ register, errors, disabled, className, ...props }, ref) => {
   return (
     <textarea
       ref={ref}
+      {...register}
       rows="1"
       autoComplete="off"
       className={cn(
@@ -28,6 +29,9 @@ const InputPrompt = forwardRef(({ className, ...props }, ref) => {
         hover:bg-zinc-50
         focus:border-zinc-300
         focus:bg-zinc-100`,
+        errors &&
+          "border-rose-500 bg-red-50 hover:bg-red-50 focus:border-rose-500 focus:bg-red-50",
+        disabled && "pointer-events-none opacity-50",
         className
       )}
       {...props}
