@@ -3,18 +3,23 @@
 import axios from "axios"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
+import { useRouter } from "next/navigation"
+import { toast } from "react-hot-toast"
 
 import Button from "@components/button"
 import Input from "@components/input"
 import InputPrompt from "@components/inputprompt"
 
 const NewListing = () => {
+  const router = useRouter()
+
   const [priceString, setPriceString] = useState("")
   const [isLoading, setIsLoading] = useState(false)
 
   const {
     register,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm({
     defaultValues: {
@@ -29,7 +34,9 @@ const NewListing = () => {
 
   const handlePriceChange = (e) => {
     const parsedPrice = parseInt(e.target.value.replace(/[^\d]/g, "")) || 0
-    setPriceString(formatPrice(parsedPrice))
+    const formattedPrice = formatPrice(parsedPrice)
+    setPriceString(formattedPrice)
+    setValue("price", formattedPrice)
   }
 
   const moveCaretToEnd = (e) => {
@@ -48,8 +55,12 @@ const NewListing = () => {
         description: data.description,
         price: priceValue,
       })
-      .catch((error) => console.log(error.respoonse.data))
-      .finally(setIsLoading(false))
+      .then((res) => toast.success("Your listing has been created!"))
+      .catch((error) => console.log(error.response.data))
+      .finally(() => {
+        router.push("/knacks")
+        setIsLoading(false)
+      })
   }
 
 
@@ -57,6 +68,7 @@ const NewListing = () => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="m-auto mt-36 flex flex-col w-80 gap-2">
         <Button
+          onClick={() => console.log("Image upload to be implemented")}
           variant="outline"
           className="text-zinc-500 h-9"
         >
