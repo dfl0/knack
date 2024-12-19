@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils"
 const Button = ({ children, variant, uniform, disabled, className, ...props }) => {
   return (
     <button
+      type="button"
       className={cn(
         `inline-flex
         h-8
