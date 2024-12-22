@@ -18,7 +18,8 @@ const getSignedURL = async () => {
   const session = await getCurrentSession()
   if (!session.user) return null
 
-  const fileKey = crypto.randomBytes(32).toString("hex")  // could also inclulde file type or object type in the future
+  // const fileKey = crypto.randomBytes(32).toString("hex")  // could also inclulde file type or object type in the future
+  const fileKey = "test-key"  // test if previous line is causing issues in production environment
 
   const putObjectCommand = new PutObjectCommand({
     Bucket: process.env.AWS_S3_BUCKET_NAME,
