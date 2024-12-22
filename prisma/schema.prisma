@@ -65,6 +65,7 @@ model Message {
 
 model Listing {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  image       String
   description String
   price       Int
   postedAt    DateTime @default(now())
