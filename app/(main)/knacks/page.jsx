@@ -1,17 +1,12 @@
-"use client"
+import getListings from "@/app/actions/getlistings"
 
-import { useRouter } from "next/navigation"
+import Listings from "@components/listings"
 
-import Button from "@components/button"
-
-export default function Knacks() {
-  const router = useRouter()
-
+export default async function Knacks() {
+  const initialListings = await getListings()
   return (
-    <Button
-      onClick={() => router.push("/knacks/new")}
-    >
-      New listing
-    </Button>
+    <Listings
+      listings={initialListings}
+    />
   )
 }
