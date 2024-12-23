@@ -1,3 +1,5 @@
+"use server"
+
 import prisma from "@/app/libs/prismadb"
 
 import getCurrentSession from "@/app/actions/getcurrentsession"

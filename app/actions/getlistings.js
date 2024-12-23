@@ -1,5 +1,6 @@
+"use server"
+
 import prisma from "@/app/libs/prismadb"
-import getCurrentUser from "@/app/actions/getcurrentuser"
 
 const getListings = async () => {
   try {
