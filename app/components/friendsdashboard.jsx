@@ -132,10 +132,11 @@ const FriendsDashboard = ({ user, initialFriends }) => {
   }
 
   return (
-    <div className="flex justify-center gap-16 pt-4">
+    <div className="flex justify-center gap-16">
       <div className="w-full">
         <div className="pb-1 flex items-end justify-between">
           <span className="text-sm font-medium text-zinc-500">Friends</span>
+
           <Button
             variant="subtle"
             onClick={() => setShowAddFriend(true)}
@@ -144,11 +145,14 @@ const FriendsDashboard = ({ user, initialFriends }) => {
           >
             <UserPlus size={16} className="shrink-0" />
           </Button>
+
           <Modal isOpen={showAddFriend} onClose={() => setShowAddFriend(false)}>
             <AddFriendForm />
           </Modal>
         </div>
+
         <Divider />
+
         <div className="flex flex-col">
           {friends.map((friend) => (
             <div key={friend.id}>
@@ -158,9 +162,14 @@ const FriendsDashboard = ({ user, initialFriends }) => {
           ))}
         </div>
       </div>
+
       <div className="w-full">
-        <span className="pb-1 text-sm font-medium text-zinc-500">Pending</span>
+        <div className="pb-1">
+          <span className="text-sm font-medium text-zinc-500">Pending</span>
+        </div>
+
         <Divider />
+
         <div className="flex flex-col">
           {incomingRequests.map((request) => (
             <div key={request.sender.id}>

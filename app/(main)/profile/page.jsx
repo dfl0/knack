@@ -8,8 +8,8 @@ export default async function Profile() {
   const initialFriends = await getFriends()
 
   return (
-    <div className="h-full w-full px-64 py-6">
-      <div className="m-auto w-full text-lg font-medium text-zinc-950">
+    <div className="container flex flex-col mx-auto my-8 gap-8">
+      <div className="text-lg font-medium text-zinc-950">
         Profile
       </div>
       <FriendsDashboard
