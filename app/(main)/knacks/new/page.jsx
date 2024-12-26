@@ -47,7 +47,7 @@ const NewListing = () => {
   }
 
   const formatPrice = (value) => {
-    return value > 0 ? `$${(value / 100).toFixed(2).toString()}` : "";
+    return value > 0 ? `$${(value / 100).toFixed(2).toString()}` : ""
   }
 
   const handlePriceChange = (e) => {
@@ -72,7 +72,7 @@ const NewListing = () => {
 
         await axios.post("/api/knacks", {
           image: signedURL.split("?")[0],
-          description: data.description,
+          description: data.description.trim(),
           price: parseInt(data.price.replace(/[^\d]/g, "")) || 0
         })
 
@@ -120,6 +120,7 @@ const NewListing = () => {
             register={{
               ...register("description", {
                 required: true,
+                validate: (desc) => desc.trim().length > 0 || "Description can not be empty",
               })
             }}
             errors={errors.description}
