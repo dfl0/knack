@@ -1,11 +1,11 @@
 import getListings from "@/app/actions/getlistings"
 
-import Listings from "@components/listings"
+import Feed from "@/app/components/feed"
 
 export default async function Knacks() {
   const initialListings = await getListings()
   return (
-    <Listings
+    <Feed
       listings={initialListings}
     />
   )
