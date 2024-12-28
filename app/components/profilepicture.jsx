@@ -8,24 +8,30 @@ import Modal from "@components/modal"
 import PFPEditor from "@components/pfpeditor"
 
 const ProfilePicture = ({ src, name, editable }) => {
-  const placeholderRef = useRef(null)
+  const [pfp, setPFP] = useState(src)
   const [showPFPEditor, setShowPFPEditor] = useState(false)
+  const placeholderRef = useRef(null)
 
   useEffect(() => {
+    if (pfp) return // placeholder unused if user has uploaded a custom pfp
+
+    // set size of "placeholder" initials for default pfp
     const size = placeholderRef.current.clientWidth
     placeholderRef.current.style.fontSize = `${0.6 * size}px`
     placeholderRef.current.style.lineHeight = `${size}px`
     placeholderRef.current.innerHTML = name[0]
-  }, [name])
+  }, [pfp, name])
 
   return (
     <div className="relative h-32 w-32 overflow-clip rounded-[40%] bg-zinc-300">
       {src ? (
         <Image
-          src={src}
-          fill={true}
-          sizes="128px, 64px, 32px"
+          src={pfp}
           alt={`${name}'s profile picture`}
+          fill={true}
+          sizes="256px, 128px, 64px, 32px"
+          priority={true}
+          className="object-cover"
         />
       ) : (
         <div
@@ -46,7 +52,13 @@ const ProfilePicture = ({ src, name, editable }) => {
             </div>
           </div>
           <Modal isOpen={showPFPEditor} onClose={() => setShowPFPEditor(false)}>
-            <PFPEditor />
+            <PFPEditor
+              current={src || undefined}
+              onComplete={(updatedPFP) => {
+                setPFP(updatedPFP)
+                setShowPFPEditor(false)
+              }}
+            />
           </Modal>
         </>
       )}

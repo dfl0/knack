@@ -8,10 +8,11 @@ datasource db {
 }
 
 model User {
-  id             String @id @default(auto()) @map("_id") @db.ObjectId
+  id             String  @id @default(auto()) @map("_id") @db.ObjectId
   name           String
-  email          String @unique
+  email          String  @unique
   hashedPassword String
+  pfp            String?
 
   friendIds String[] @db.ObjectId
 
