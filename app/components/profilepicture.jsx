@@ -24,7 +24,7 @@ const ProfilePicture = ({ src, name, editable }) => {
 
   return (
     <div className="relative h-32 w-32 overflow-clip rounded-[40%] bg-zinc-300">
-      {src ? (
+      {pfp ? (
         <Image
           src={pfp}
           alt={`${name}'s profile picture`}
@@ -53,7 +53,7 @@ const ProfilePicture = ({ src, name, editable }) => {
           </div>
           <Modal isOpen={showPFPEditor} onClose={() => setShowPFPEditor(false)}>
             <PFPEditor
-              current={src || undefined}
+              current={pfp || undefined}
               onComplete={(updatedPFP) => {
                 setPFP(updatedPFP)
                 setShowPFPEditor(false)

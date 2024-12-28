@@ -50,7 +50,22 @@ const PFPEditor = ({ current, onComplete }) => {
         setIsLoading(false)
       }
     } else {
-      toast("Please upload an image")
+      toast("Please upload a new image")
+    }
+  }
+
+  const handleRemovePFP = async () => {
+    try {
+      setIsLoading(true)
+
+      await axios.delete("/api/pfp")
+
+      onComplete(null)
+      toast.success("Your profile picture has been removed")
+    } catch (error) {
+      toast.error("Profile picture could not be deleted, please try again")
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -62,7 +77,7 @@ const PFPEditor = ({ current, onComplete }) => {
         <div className="relative w-full aspect-square rounded-[40%] overflow-clip">
           <Image
             src={fileURL}
-            alt={file?.name}
+            alt={fileURL}
             fill={true}
             sizes="256px, 128px, 64px, 32px"
             className="object-cover"
@@ -78,6 +93,16 @@ const PFPEditor = ({ current, onComplete }) => {
       />
 
       <div className="flex gap-2">
+        {current && (
+            <Button
+              variant="secondary"
+              onClick={handleRemovePFP}
+              disabled={isLoading}
+              className="w-full"
+            >
+              Remove
+            </Button>
+        )}
         <Button
           onClick={handleUpdatePFP}
           disabled={isLoading}
