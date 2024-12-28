@@ -15,7 +15,7 @@ export default async function Profile() {
       </div>
 
       <ProfilePicture
-        src={currentUser.pfp}
+        src={currentUser.pfp || null}
         name={currentUser.name}
         editable
       />
