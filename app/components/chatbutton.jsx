@@ -91,7 +91,7 @@ export default function ChatButton({ chat, hasNewMessage, selected }) {
         ) : (
           <ProfilePicture
             src={otherMembers[0]?.pfp}
-            name={otherMembers[0].name}
+            name={otherMembers[0]?.name}
             className="mr-3 h-8 w-8"
           />
         )}

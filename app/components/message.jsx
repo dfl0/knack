@@ -19,7 +19,7 @@ const Message = ({ sender, body, sentAt, consecutive }) => {
           <div className="flex items-baseline">
             <ProfilePicture
               src={sender?.pfp}
-              name={sender.name}
+              name={sender?.name}
               className="relative top-5 -mt-4 mr-2 h-8 w-8"
             />
 
