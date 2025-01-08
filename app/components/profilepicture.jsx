@@ -27,7 +27,7 @@ const ProfilePicture = ({ src, name, editable, className, ...props }) => {
   return (
     <div
       className={cn(
-        "relative aspect-square h-32 w-32 shrink-0 overflow-clip rounded-[40%] bg-zinc-300",
+        "relative aspect-square h-32 w-32 shrink-0 overflow-clip rounded-[40%] bg-zinc-300 outline outline-1 outline-black/20",
         className
       )}
       {...props}
