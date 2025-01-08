@@ -44,7 +44,7 @@ export default function NavBar({ currentUser, ...props }) {
       <div className="flex items-center gap-2">
         <div className="text-sm">{currentUser?.name}</div>
         <ProfilePicture
-          src={currentUser.pfp}
+          src={currentUser?.pfp}
           name={currentUser.name}
           onClick={() => router.push("/profile")}
           className="h-8 w-8 hover:cursor-pointer"

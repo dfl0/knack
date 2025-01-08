@@ -90,7 +90,7 @@ export default function ChatButton({ chat, hasNewMessage, selected }) {
           <div className="mr-3 h-8 w-8 shrink-0 rounded-[40%] bg-zinc-300" /> // temporary blank placeholder for group chat image
         ) : (
           <ProfilePicture
-            src={otherMembers[0].pfp}
+            src={otherMembers[0]?.pfp}
             name={otherMembers[0].name}
             className="mr-3 h-8 w-8"
           />

@@ -18,7 +18,7 @@ const Message = ({ sender, body, sentAt, consecutive }) => {
         <div className="mt-2 flex flex-col py-0.5 pl-4 pr-10 hover:bg-zinc-100/50">
           <div className="flex items-baseline">
             <ProfilePicture
-              src={sender.pfp}
+              src={sender?.pfp}
               name={sender.name}
               className="relative top-5 -mt-4 mr-2 h-8 w-8"
             />

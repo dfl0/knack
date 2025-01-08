@@ -26,7 +26,7 @@ const Listing = ({ author, image, description, price, postedAt, className, ...pr
       <div className="flex items-center justify-between gap-4 border-b px-2 py-2">
         <div className="flex shrink-0 items-center gap-2">
           <ProfilePicture
-            src={author.pfp}
+            src={author?.pfp}
             name={author.name}
             className="h-7 w-7"
           />

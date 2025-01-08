@@ -25,7 +25,7 @@ const Friend = ({ user, onRemove, className, ...props }) => {
 
       <div className="flex items-center gap-3">
         <ProfilePicture
-          src={user.pfp}
+          src={user?.pfp}
           name={user.name}
           className="w-8 h-8"
         />
