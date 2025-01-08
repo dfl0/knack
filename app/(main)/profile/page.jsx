@@ -16,7 +16,7 @@ export default async function Profile() {
 
       <ProfilePicture
         src={currentUser?.pfp}
-        name={currentUser?.name}
+        alt={currentUser?.name}
         editable
       />
 
