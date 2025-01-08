@@ -27,7 +27,7 @@ const Feed = ({ listings }) => {
         {listings.map((listing) => (
           <Listing
             key={listing.id}
-            author={listing.author.name}
+            author={listing.author}
             image={listing.image}
             description={listing.description}
             price={listing.price}

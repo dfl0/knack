@@ -75,6 +75,7 @@ const ChatSidebar = ({ initialChats, updatedChatIds, friends, className, ...prop
         <span className="text-sm font-medium text-zinc-400">
           Chats
         </span>
+
         <Button
           variant="subtle"
           onClick={() => router.push("/chats/new")}
@@ -84,14 +85,19 @@ const ChatSidebar = ({ initialChats, updatedChatIds, friends, className, ...prop
           <SquarePen size={16} className="shrink-0" />
         </Button>
       </div>
-      {chats.map((chat) => (
-        <ChatButton
-          key={chat.id}
-          chat={chat}
-          hasNewMessage={updatedChatIds?.includes(chat.id)}
-          selected={chat.id === chatId}
-        />
-      ))}
+
+      {session.status === "loading" ? (
+        <div>Loading...</div>
+      ) : (
+        chats.map((chat) => (
+          <ChatButton
+            key={chat.id}
+            chat={chat}
+            hasNewMessage={updatedChatIds?.includes(chat.id)}
+            selected={chat.id === chatId}
+          />
+        ))
+      )}
     </div>
   )
 }
