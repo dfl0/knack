@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils"
 import Modal from "@components/modal"
 import PFPEditor from "@components/pfpeditor"
 
-const ProfilePicture = ({ src, name, editable, className, ...props }) => {
+const ProfilePicture = ({ src, alt, editable, className, ...props }) => {
   const [pfp, setPFP] = useState(src)
   const [showPFPEditor, setShowPFPEditor] = useState(false)
   const placeholderRef = useRef(null)
@@ -21,8 +21,8 @@ const ProfilePicture = ({ src, name, editable, className, ...props }) => {
     const size = placeholderRef.current.clientWidth
     placeholderRef.current.style.fontSize = `${0.6 * size}px`
     placeholderRef.current.style.lineHeight = `${size}px`
-    placeholderRef.current.innerHTML = name[0]
-  }, [pfp, name])
+    placeholderRef.current.innerHTML = alt[0]
+  }, [pfp, alt])
 
   return (
     <div
@@ -35,7 +35,7 @@ const ProfilePicture = ({ src, name, editable, className, ...props }) => {
       {pfp ? (
         <Image
           src={pfp}
-          alt={`${name}'s profile picture`}
+          alt={`${alt}'s profile picture`}
           fill={true}
           sizes="256px, 128px, 64px, 32px"
           priority={true}
