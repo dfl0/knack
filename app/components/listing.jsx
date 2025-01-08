@@ -5,6 +5,7 @@ import { isSameDay, isYesterday, isSameWeek, format } from "date-fns"
 import Image from "next/image"
 
 import { cn } from "@/lib/utils"
+import ProfilePicture from "@components/profilepicture"
 
 const Listing = ({ author, image, description, price, postedAt, className, ...props }) => {
   const formattedPrice = (price / 100).toFixed(2).toString()
@@ -22,15 +23,23 @@ const Listing = ({ author, image, description, price, postedAt, className, ...pr
       className={cn("flex w-96 flex-col rounded-lg border", className)}
       {...props}
     >
-      <div className="flex items-baseline justify-between gap-4 border-b px-2 py-2">
-        <span className="text-sm font-medium">{author}</span>
+      <div className="flex items-center justify-between gap-4 border-b px-2 py-2">
+        <div className="flex shrink-0 items-center gap-2">
+          <ProfilePicture
+            src={author.pfp}
+            name={author.name}
+            className="h-7 w-7"
+          />
+
+          <span className="text-sm font-medium">{author.name}</span>
+        </div>
         <span className="text-xs text-zinc-500">{timestamp}</span>
       </div>
 
       <div className="relative h-72">
         <Image
           src={image}
-          alt={`${author}'s listing`}
+          alt={`${author.name}'s listing`}
           fill={true}
           sizes="100vw, 50vw, 33vw, 25vw"
           className="object-cover"

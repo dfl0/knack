@@ -1,16 +1,17 @@
 "use client"
 
 import Link from "next/link"
-import Image from "next/image"
-import { usePathname } from "next/navigation"
+import { useRouter, usePathname } from "next/navigation"
 import { signOut } from "next-auth/react"
 import { LogOut } from "lucide-react"
 
 import Input from "@components/input"
 import Button from "@components/button"
 import ToggleButton from "@components/togglebutton"
+import ProfilePicture from "@components/profilepicture"
 
 export default function NavBar({ currentUser, ...props }) {
+  const router = useRouter()
   const pathname = usePathname()
 
   return (
@@ -42,16 +43,12 @@ export default function NavBar({ currentUser, ...props }) {
       </div>
       <div className="flex items-center gap-2">
         <div className="text-sm">{currentUser?.name}</div>
-        <div className="h-8 w-8 overflow-hidden rounded-xl">
-          <Link href="/profile">
-            <Image
-              src="/images/default_pfp.png"
-              alt="Profile Picture"
-              width={32}
-              height={32}
-            />
-          </Link>
-        </div>
+        <ProfilePicture
+          src={currentUser.pfp}
+          name={currentUser.name}
+          onClick={() => router.push("/profile")}
+          className="h-8 w-8 hover:cursor-pointer"
+        />
         <Button
           variant="invisible"
           onClick={() => signOut()}

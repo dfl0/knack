@@ -4,10 +4,12 @@ import { useRef, useEffect, useState } from "react"
 
 import Image from "next/image"
 
+import { cn } from "@/lib/utils"
+
 import Modal from "@components/modal"
 import PFPEditor from "@components/pfpeditor"
 
-const ProfilePicture = ({ src, name, editable }) => {
+const ProfilePicture = ({ src, name, editable, className, ...props }) => {
   const [pfp, setPFP] = useState(src)
   const [showPFPEditor, setShowPFPEditor] = useState(false)
   const placeholderRef = useRef(null)
@@ -23,7 +25,13 @@ const ProfilePicture = ({ src, name, editable }) => {
   }, [pfp, name])
 
   return (
-    <div className="relative h-32 w-32 overflow-clip rounded-[40%] bg-zinc-300">
+    <div
+      className={cn(
+        "relative aspect-square h-32 w-32 shrink-0 overflow-clip rounded-[40%] bg-zinc-300",
+        className
+      )}
+      {...props}
+    >
       {pfp ? (
         <Image
           src={pfp}

@@ -12,6 +12,7 @@ import useOtherMembers from "@/app/hooks/useOtherMembers"
 import { pusherClient } from "@/app/libs/pusher"
 
 import Button from "@components/button"
+import ProfilePicture from "@components/profilepicture"
 
 export default function ChatButton({ chat, hasNewMessage, selected }) {
   const session = useSession()
@@ -85,20 +86,32 @@ export default function ChatButton({ chat, hasNewMessage, selected }) {
       )}
     >
       <div className="flex items-center">
-        <div className="h-8 w-8 shrink-0 rounded-xl bg-zinc-300"></div>
-        <div className="ml-2 flex w-full flex-col items-start justify-center overflow-hidden">
+        {chat.isGroup ? (
+          <div className="mr-3 h-8 w-8 shrink-0 rounded-[40%] bg-zinc-300" /> // temporary blank placeholder for group chat image
+        ) : (
+          <ProfilePicture
+            src={otherMembers[0].pfp}
+            name={otherMembers[0].name}
+            className="mr-3 h-8 w-8"
+          />
+        )}
+
+        <div className="flex w-full flex-col items-start justify-center overflow-hidden">
           <div className="flex max-w-full items-center gap-2">
             <span className="max-w-full truncate text-sm font-medium">
               {chatName}
             </span>
+
             {showIndicator && (
               <div className="h-2 w-2 shrink-0 rounded-full bg-sky-400" />
             )}
           </div>
+
           <span className="max-w-full truncate text-xs text-zinc-500">
             {latestActivity}
           </span>
         </div>
+
         <Button
           variant="subtle"
           onClick={handleDelete}

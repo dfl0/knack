@@ -5,6 +5,7 @@ import { toast } from "react-hot-toast"
 
 import { cn } from "@/lib/utils"
 import Button from "@components/button"
+import ProfilePicture from "@components/profilepicture"
 
 const Friend = ({ user, onRemove, className, ...props }) => {
   const handleRemove = () => {
@@ -21,7 +22,17 @@ const Friend = ({ user, onRemove, className, ...props }) => {
       )}
       {...props}
     >
-      <span className="text-sm">{user.name}</span>
+
+      <div className="flex items-center gap-3">
+        <ProfilePicture
+          src={user.pfp}
+          name={user.name}
+          className="w-8 h-8"
+        />
+
+        <span className="text-sm font-medium">{user.name}</span>
+      </div>
+
       <div className="w-20 px-1">
         <Button
           onClick={handleRemove}
