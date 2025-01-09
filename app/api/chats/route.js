@@ -7,12 +7,8 @@ import getCurrentUser from "@/app/actions/getcurrentuser"
 export async function POST(req) {
   try {
     const currentUser = await getCurrentUser()
-    const body = await req.json()
-    const otherMembers = body.members
-    const memberIds = [
-      currentUser.id,
-      ...otherMembers.map((member) => member.value),
-    ].sort()
+    const { recipientIds } = await req.json()
+    const memberIds = [currentUser.id, ...recipientIds].sort()
 
     if (!currentUser)
       return new NextResponse("Could not get current user", { status: 401 })
@@ -31,7 +27,7 @@ export async function POST(req) {
 
     const newChat = await prisma.chat.create({
       data: {
-        isGroup: otherMembers.length > 1,
+        isGroup: recipientIds.length > 1,
         members: {
           connect: memberIds.map((id) => ({ id })),
         },

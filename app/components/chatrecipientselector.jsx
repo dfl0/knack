@@ -2,7 +2,7 @@
 
 import SearchSelect from "@components/searchselect"
 
-const ChatMemberSelector = ({ friends, members, handleChange }) => {
+const ChatRecipientSelector = ({ friends, recipients, handleChange }) => {
   return (
     <div className="border-b border-zinc-100">
       <div className="flex items-center justify-center px-4">
@@ -16,7 +16,7 @@ const ChatMemberSelector = ({ friends, members, handleChange }) => {
           onChange={(value) => {
             handleChange(value)
           }}
-          value={members}
+          value={recipients}
           className="w-full border-none rounded-none bg-transparent hover:bg-transparent"
         />
       </div>
@@ -24,4 +24,4 @@ const ChatMemberSelector = ({ friends, members, handleChange }) => {
   )
 }
 
-export default ChatMemberSelector
+export default ChatRecipientSelector

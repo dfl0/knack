@@ -7,13 +7,13 @@ import { toast } from "react-hot-toast"
 
 import getFriends from "@/app/actions/getfriends"
 
-import ChatMemberSelector from "@components/chatmemberselector"
+import ChatRecipientSelector from "@components/chatrecipientselector"
 import ChatPrompt from "@components/chatprompt"
 
 const NewChat = () => {
   const router = useRouter()
   const [friends, setFriends] = useState(null)
-  const [members, setMembers] = useState([])
+  const [recipients, setRecipients] = useState([])
 
   useEffect(() => {
     const fetchFriends = async () => {
@@ -25,9 +25,11 @@ const NewChat = () => {
 
 
   const handleNewChat = async () => {
-    if (members.length > 0) {
+    if (recipients.length > 0) {
       try {
-        const { data: newChat } = await axios.post("/api/chats", { members })
+        const { data: newChat } = await axios.post("/api/chats", {
+          recipientIds: recipients.map((recipient) => recipient.value),
+        })
         router.push(`/chats/${newChat.id}`)
         return newChat.id
       } catch (error) {
@@ -40,10 +42,10 @@ const NewChat = () => {
 
   return (
     <div className="flex h-full w-full flex-col justify-between">
-      <ChatMemberSelector
+      <ChatRecipientSelector
         friends={friends}
-        members={members}
-        handleChange={setMembers}
+        recipients={recipients}
+        handleChange={setRecipients}
         className="w-full"
       />
       <ChatPrompt
