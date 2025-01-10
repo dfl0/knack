@@ -42,7 +42,12 @@ export async function POST(req) {
     })
 
     for (const member of updatedChat.members) {
-      await pusherServer.trigger(member.email, "chat:update", updatedChat)
+      await pusherServer.trigger(member.email, "chat:update", {
+        id: updatedChat.id,
+        members: updatedChat.members,
+        isGroup: updatedChat.isGroup,
+        messages: [updatedChat.messages[updatedChat.messages.length - 1]], // pass only the latest message
+      })
 
       if (member.id !== currentUser.id) {
         await prisma.user.update({

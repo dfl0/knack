@@ -51,7 +51,7 @@ const ChatSidebar = ({ initialChats, updatedChatIds, friends, className, ...prop
     return () => {
       pusherClient.unsubscribe(currentUserEmail)
       pusherClient.unbind("chat:update", updateChatHandler)
-      pusherClient.bind("chat:deleted", deleteChatHandler)
+      pusherClient.unbind("chat:deleted", deleteChatHandler)
     }
   }, [currentUserEmail, chats, chatId, router])
 
