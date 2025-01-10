@@ -45,7 +45,7 @@ const ProfilePicture = ({ src, alt, editable, className, ...props }) => {
         <div
           id="placeholder"
           ref={placeholderRef}
-          className="h-full w-full select-none text-center align-middle font-medium text-zinc-50"
+          className="absolute h-full w-full select-none text-center font-medium text-zinc-50"
         />
       )}
 
