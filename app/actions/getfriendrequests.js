@@ -4,7 +4,7 @@ import prisma from "@/app/libs/prismadb"
 
 import getCurrentSession from "@/app/actions/getcurrentsession"
 
-const getCurrentUser = async () => {
+const getFriendRequests = async () => {
   try {
     const session = await getCurrentSession()
 
@@ -13,15 +13,26 @@ const getCurrentUser = async () => {
 
     const currentUser = await prisma.user.findUnique({
       where: { email: session.user.email },
+      include: {
+        outgoingFriendRequests: {
+          include: { recipient: true },
+        },
+        incomingFriendRequests: {
+          include: { sender: true },
+        },
+      },
     })
 
     if (!currentUser)
       return null
 
-    return currentUser
+    return {
+      outgoing: currentUser.outgoingFriendRequests,
+      incoming: currentUser.incomingFriendRequests,
+    }
   } catch (error) {
     return null
   }
 }
 
-export default getCurrentUser
+export default getFriendRequests
