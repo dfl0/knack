@@ -13,11 +13,11 @@ import Divider from "@components/divider"
 import Modal from "@components/modal"
 import AddFriendForm from "@components/addfriendform"
 
-const FriendsDashboard = ({ user, initialFriends }) => {
+const FriendsDashboard = ({ initialFriends, initialOutgoingRequests, initialIncomingRequests }) => {
   const session = useSession()
   const [friends, setFriends] = useState(initialFriends)
-  const [incomingRequests, setIncomingRequests] = useState(user?.incomingFriendRequests)
-  const [outgoingRequests, setOutgoingRequests] = useState(user?.outgoingFriendRequests)
+  const [incomingRequests, setIncomingRequests] = useState(initialIncomingRequests)
+  const [outgoingRequests, setOutgoingRequests] = useState(initialOutgoingRequests)
   const [showAddFriend, setShowAddFriend] = useState(false)
 
   const currentUserEmail = useMemo(() => {
@@ -124,12 +124,6 @@ const FriendsDashboard = ({ user, initialFriends }) => {
       pusherClient.unbind("friend:remove", removeFriendHandler)
     }
   }, [currentUserEmail, outgoingRequests, incomingRequests, friends])
-
-  if (!user) {
-    return (
-      <div>Profile page</div>
-    )
-  }
 
   return (
     <div className="flex justify-center gap-16">
