@@ -1,5 +1,6 @@
 "use client"
 
+import { useRouter } from "next/navigation"
 import { isSameDay, isYesterday, isSameWeek, format } from "date-fns"
 
 import Image from "next/image"
@@ -8,7 +9,9 @@ import { cn } from "@/lib/utils"
 
 import ProfilePicture from "@components/profilepicture"
 
-const Listing = ({ author, image, description, price, postedAt, className, ...props }) => {
+const Listing = ({ id, author, image, description, price, postedAt, className, ...props }) => {
+  const router = useRouter()
+
   const formattedPrice = (price / 100).toFixed(2).toString()
 
   const timestamp = isSameDay(postedAt, new Date())
@@ -21,14 +24,18 @@ const Listing = ({ author, image, description, price, postedAt, className, ...pr
 
   return (
     <div
-      className={cn("flex w-96 flex-col rounded-lg border", className)}
+      onClick={() => router.push(`/knacks/${id}`)}
+      className={cn(
+        "flex w-96 flex-col rounded-lg border hover:cursor-pointer hover:bg-zinc-50",
+        className
+      )}
       {...props}
     >
       <div className="flex items-center justify-between gap-4 border-b px-2 py-2">
         <div className="flex shrink-0 items-center gap-2">
           <ProfilePicture
             src={author?.pfp}
-            name={author?.name}
+            alt={author?.name}
             className="h-7 w-7"
           />
 
@@ -49,10 +56,10 @@ const Listing = ({ author, image, description, price, postedAt, className, ...pr
 
       <div className="flex items-baseline justify-between gap-4 border-t px-2 py-2">
         <span className="truncate text-sm">{description}</span>
-        <span className="gap-1 text-sm font-medium">
+        <div className="text-sm font-medium">
           <span className="pr-0.5">$</span>
           <span>{formattedPrice}</span>
-        </span>
+        </div>
       </div>
     </div>
   )
