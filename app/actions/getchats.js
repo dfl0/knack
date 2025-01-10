@@ -14,19 +14,14 @@ const getChats = async () => {
         updatedAt: "desc",
       },
       where: {
-        memberIds: {
-          has: currentUser.id,
-        },
+        memberIds: { has: currentUser.id },
       },
       include: {
         members: true,
         messages: {
-          orderBy: {
-            sentAt: "asc",
-          },
-          include: {
-            sender: true,
-          },
+          orderBy: { sentAt: "desc" },
+          include: { sender: true },
+          take: 1, // only include latest message
         },
       },
     })
