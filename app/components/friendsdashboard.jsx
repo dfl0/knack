@@ -4,6 +4,8 @@ import { useState, useMemo, useEffect } from "react"
 import { useSession } from "next-auth/react"
 import { UserPlus } from "lucide-react"
 
+import getFriends from "@/app//actions/getfriends"
+import getFriendRequests from "@/app/actions/getfriendrequests"
 import { pusherClient } from "@/app/libs/pusher"
 
 import Button from "@components/button"
@@ -13,12 +15,24 @@ import Divider from "@components/divider"
 import Modal from "@components/modal"
 import AddFriendForm from "@components/addfriendform"
 
-const FriendsDashboard = ({ initialFriends, initialOutgoingRequests, initialIncomingRequests }) => {
+const FriendsDashboard = () => {
   const session = useSession()
-  const [friends, setFriends] = useState(initialFriends)
-  const [incomingRequests, setIncomingRequests] = useState(initialIncomingRequests)
-  const [outgoingRequests, setOutgoingRequests] = useState(initialOutgoingRequests)
+  const [friends, setFriends] = useState([])
+  const [incomingRequests, setIncomingRequests] = useState([])
+  const [outgoingRequests, setOutgoingRequests] = useState([])
   const [showAddFriend, setShowAddFriend] = useState(false)
+
+  async function fetchData() {
+    const fetchedFriends = await getFriends()
+    const fetchedRequests = await getFriendRequests()
+    setFriends(fetchedFriends)
+    setIncomingRequests(fetchedRequests.incoming)
+    setOutgoingRequests(fetchedRequests.outgoing)
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, [])
 
   const currentUserEmail = useMemo(() => {
     return session.data?.user.email
