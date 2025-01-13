@@ -3,7 +3,7 @@
 import prisma from "@/app/libs/prismadb"
 import getCurrentUser from "@/app/actions/getcurrentuser"
 
-const getUserListings = async () => {
+const getOwnListings = async () => {
   try {
     const currentUser = await getCurrentUser()
 
@@ -13,6 +13,7 @@ const getUserListings = async () => {
     const listings = prisma.listing.findMany({
       where: { authorId: currentUser.id },
       include: { author: true },
+      orderBy: { postedAt: "desc" },
     })
 
     return listings
@@ -22,4 +23,4 @@ const getUserListings = async () => {
   }
 }
 
-export default getUserListings
+export default getOwnListings
