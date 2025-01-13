@@ -13,6 +13,7 @@ import Image from "next/image"
 import Button from "@components/button"
 import Input from "@components/input"
 import InputPrompt from "@components/inputprompt"
+import refreshFeed from "@/app/actions/refreshfeed"
 
 const NewListing = () => {
   const router = useRouter()
@@ -84,6 +85,7 @@ const NewListing = () => {
 
         toast.success("Your listing has been created!")
         router.push("/knacks")
+        refreshFeed()
       } catch (error) {
         toast.error("Listing could not be created, please try again")
       } finally {

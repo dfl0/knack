@@ -7,8 +7,9 @@ import { isSameDay, isYesterday, isSameWeek, format } from "date-fns"
 import axios from "axios"
 
 import toast from "react-hot-toast"
-
 import Image from "next/image"
+
+import refreshFeed from "@/app/actions/refreshfeed"
 
 import ProfilePicture from "@components/profilepicture"
 import Button from "@components/button"
@@ -38,6 +39,7 @@ const ListingView = ({ listing }) => {
 
       toast.success("Your listing has been deleted")
       router.back()
+      refreshFeed()
     } catch (error) {
       console.log(error)
       toast.error("Listing could not be deleted, please try again")
@@ -100,6 +102,7 @@ const ListingView = ({ listing }) => {
           <Button
             variant="secondary"
             onClick={handleDelete}
+            disabled={isLoading}
             className="ml-4 px-8 hover:bg-rose-50 hover:text-rose-600"
           >
             Delete Listing
