@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react"
 
-import getUserListings from "@/app/actions/getUserListings"
+import getOwnListings from "@/app/actions/getownlistings"
 
 import Listing from "@components/listing"
 
@@ -8,7 +8,7 @@ const ListingsDashboard = () => {
   const [listings, setListings] = useState([])
 
   async function fetchData() {
-    const fetchedListings = await getUserListings()
+    const fetchedListings = await getOwnListings()
     setListings(fetchedListings)
   }
 
