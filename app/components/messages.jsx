@@ -2,7 +2,6 @@
 
 import axios from "axios"
 import { useState, useEffect, useRef } from "react"
-import { find } from "lodash"
 
 import getChatFromId from "@/app/actions/getchatfromid"
 import { pusherClient } from "@/app/libs/pusher"
@@ -31,9 +30,6 @@ const Messages = ({ chatId }) => {
 
     const newMessageHandler = (message) => {
       setMessages((current) => {
-        if (find(current, { id: message.id }))
-          return current
-
         return current ? [...current, message] : [message]
       })
     }
