@@ -38,9 +38,6 @@ export async function POST(req) {
       },
     })
 
-    for (const member of newChat.members)
-      await pusherServer.trigger(member.email, "chat:update", newChat)
-
     return NextResponse.json(newChat, { status: 201 })
   } catch (error) {
     return new NextResponse(`Internal Error: ${error}`, { status: 500 })

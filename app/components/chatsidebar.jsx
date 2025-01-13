@@ -3,21 +3,40 @@
 import { useState, useMemo, useEffect } from "react"
 import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
+import axios from "axios"
+
 import { SquarePen } from "lucide-react"
 
-import { cn } from "@/lib/utils"
+import getCurrentUser from "@/app/actions/getcurrentuser"
+import getChats from "@/app/actions/getchats"
 import useChat from "@/app/hooks/useChat"
 import { pusherClient } from "@/app/libs/pusher"
+import { cn } from "@/lib/utils"
 
 import Button from "@components/button"
 import ChatButton from "@components/chatbutton"
 
-const ChatSidebar = ({ initialChats, updatedChatIds, friends, className, ...props }) => {
+const ChatSidebar = ({ className, ...props }) => {
   const session = useSession()
   const router = useRouter()
-  const { chatId } = useChat()
+  const { currentChatId } = useChat()
 
-  const [chats, setChats] = useState(initialChats)
+  const [chats, setChats] = useState(null)
+
+  async function fetchData() {
+    const currentUser = await getCurrentUser()
+    const fetchedChats = await getChats()
+    setChats(
+      fetchedChats.map((chat) => ({
+        ...chat,
+        updated: currentUser.updatedChatIds?.includes(chat.id), // add a field to chat records for tracking update state
+      }))
+    )
+  }
+
+  useEffect(() => {
+    fetchData()
+  }, [])
 
   const currentUserEmail = useMemo(() => {
     return session?.data?.user?.email
@@ -31,18 +50,28 @@ const ChatSidebar = ({ initialChats, updatedChatIds, friends, className, ...prop
     const updateChatHandler = (updatedChat) => {
       setChats((current) => {
         const oldChats = current.filter((chat) => chat.id !== updatedChat.id)
-        return [updatedChat, ...oldChats]
+        return [
+          {
+            ...updatedChat,
+            updated: updatedChat.id !== currentChatId,
+          },
+          ...oldChats,
+        ]
       })
+
+      if (updatedChat.id === currentChatId) {
+        axios.post(`/api/chats/${currentChatId}/seen`)
+      }
     }
 
     const deleteChatHandler = (deletedChat) => {
-      const remainingChats = chats.filter(
-        (item) => item.id !== deletedChat.id
-      )
+      const remainingChats = chats.filter((chat) => chat.id !== deletedChat.id)
       setChats(remainingChats)
 
-      if (deletedChat.id === chatId)
+      if (deletedChat.id === currentChatId)
         router.push("/chats")
+
+      axios.post(`/api/chats/${deletedChat.id}/seen`)
     }
 
     pusherClient.bind("chat:update", updateChatHandler)
@@ -53,7 +82,17 @@ const ChatSidebar = ({ initialChats, updatedChatIds, friends, className, ...prop
       pusherClient.unbind("chat:update", updateChatHandler)
       pusherClient.unbind("chat:deleted", deleteChatHandler)
     }
-  }, [currentUserEmail, chats, chatId, router])
+  }, [currentUserEmail, chats, currentChatId, router])
+
+  const handleSeen = (chatId) => {
+    setChats((current) => (
+      current.map(
+        (chat) => chat.id === chatId ? { ...chat, updated: false } : chat
+      )
+    ))
+
+    axios.post(`/api/chats/${chatId}/seen`)
+  }
 
   return (
     <div
@@ -86,15 +125,16 @@ const ChatSidebar = ({ initialChats, updatedChatIds, friends, className, ...prop
         </Button>
       </div>
 
-      {session.status === "loading" ? (
+      {session.status === "loading" || !chats ? (
         <div>Loading...</div>
       ) : (
         chats.map((chat) => (
           <ChatButton
             key={chat.id}
             chat={chat}
-            hasNewMessage={updatedChatIds?.includes(chat.id)}
-            selected={chat.id === chatId}
+            updated={chat.updated}
+            onSeen={handleSeen}
+            selected={chat.id === currentChatId}
           />
         ))
       )}

@@ -2,47 +2,23 @@
 
 import axios from "axios"
 import { useState, useEffect, useCallback, useMemo } from "react"
-import { useSession } from "next-auth/react"
 import { useRouter } from "next/navigation"
 import { X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-import useChat from "@/app/hooks/useChat"
 import useOtherMembers from "@/app/hooks/useOtherMembers"
-import { pusherClient } from "@/app/libs/pusher"
 
 import Button from "@components/button"
 import ProfilePicture from "@components/profilepicture"
 
-export default function ChatButton({ chat, hasNewMessage, selected }) {
-  const session = useSession()
+const ChatButton = ({ chat, updated, onSeen, selected }) => {
   const router = useRouter()
   const otherMembers = useOtherMembers(chat)
-  const [showIndicator, setShowIndicator] = useState(hasNewMessage)
-
-  const currentUserEmail = useMemo(() => {
-    return session?.data?.user?.email
-  }, [session?.data?.user?.email])
-
-  const currentChatId = useChat().chatId
+  const [showIndicator, setShowIndicator] = useState(updated)
 
   useEffect(() => {
-    if (!currentUserEmail) return
-
-    pusherClient.subscribe(currentUserEmail)
-
-    const updateChatIndicator = (updatedChat) => {
-      if (updatedChat.id === chat.id && updatedChat.id !== currentChatId)
-        setShowIndicator(true)
-    }
-
-    pusherClient.bind("chat:update", updateChatIndicator)
-
-    return () => {
-      pusherClient.unsubscribe(currentUserEmail)
-      pusherClient.unbind("chat:update", updateChatIndicator)
-    }
-  }, [currentUserEmail, chat, currentChatId])
+    setShowIndicator(updated)
+  }, [updated])
 
   // set the default chat name to list of first names if group and full name if direct
   const chatName = chat.isGroup
@@ -53,9 +29,9 @@ export default function ChatButton({ chat, hasNewMessage, selected }) {
     : otherMembers[0].name
 
   const handleClick = useCallback(() => {
+    onSeen(chat.id)
     router.push(`/chats/${chat.id}`)
-    setShowIndicator(false)
-  }, [chat.id, router])
+  }, [chat.id, router, onSeen])
 
   const handleDelete = (e) => {
     e.stopPropagation()
@@ -124,3 +100,5 @@ export default function ChatButton({ chat, hasNewMessage, selected }) {
     </div>
   )
 }
+
+export default ChatButton

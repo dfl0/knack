@@ -1,6 +1,5 @@
 "use client"
 
-import axios from "axios"
 import { useState, useEffect, useRef } from "react"
 
 import getChatFromId from "@/app/actions/getchatfromid"
@@ -24,7 +23,6 @@ const Messages = ({ chatId }) => {
 
     fetchMessages()
     bottomRef.current?.scrollIntoView({ block: "end" })
-    axios.post("/api/chats/seen", { chatId })
 
     pusherClient.subscribe(chatId)
 

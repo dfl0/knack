@@ -4,14 +4,14 @@ import { useMemo } from "react"
 const useChat = () => {
   const params = useParams()
 
-  const chatId = useMemo(() => {
+  const currentChatId = useMemo(() => {
     if (!params?.chatId) return ""
     return params?.chatId
   }, [params?.chatId])
 
   return useMemo(() => ({
-    chatId
-  }), [chatId])
+    currentChatId
+  }), [currentChatId])
 }
 
 export default useChat

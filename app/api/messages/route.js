@@ -43,20 +43,18 @@ export async function POST(req) {
     })
 
     for (const member of updatedChat.members) {
-      await pusherServer.trigger(member.email, "chat:update", updatedChat)
-
       if (member.id !== currentUser.id) {
         await prisma.user.update({
-          where: {
-            id: member.id,
-          },
+          where: { id: member.id },
           data: {
-            updatedChatIds: member.updatedChatIds.includes(updatedChat.id)
-              ? member.updatedChatids
-              : [...member.updatedChatIds, updatedChat.id],
+            updatedChatIds: member.updatedChatIds?.includes(updatedChat.id)
+              ? member.updatedChatIds
+              : [updatedChat.id, ...member.updatedChatIds],
           },
         })
       }
+
+      await pusherServer.trigger(member.email, "chat:update", updatedChat)
     }
 
     return NextResponse.json(newMessage)
